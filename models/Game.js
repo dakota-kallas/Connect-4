@@ -7,7 +7,13 @@ class Game {
     this.end = undefined;
     this.status = Statuses.UNFINISHED;
     this.id = uuidv4();
-    this.grid = [];
+    this.grid = [
+      [" ", " ", " ", " ", " ", " ", " "],
+      [" ", " ", " ", " ", " ", " ", " "],
+      [" ", " ", " ", " ", " ", " ", " "],
+      [" ", " ", " ", " ", " ", " ", " "],
+      [" ", " ", " ", " ", " ", " ", " "],
+    ];
   }
 }
 
