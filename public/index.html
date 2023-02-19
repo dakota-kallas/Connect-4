@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <section class="container my-5">
+    <section id="game-list-view" class="container my-5">
         <form id="game-input" class="w-50 float-start d-flex my-3">
             <div class="input-group mx-2">
                 <label for="color-select" class="input-group-text text-body">Color</label>
@@ -44,7 +44,7 @@
                 <label for="computer-select" class="input-group-text text-body">Computer</label>
                 <select id="computer-select" class="form-control text-body"></select>
             </div>
-            <input type="submit" value="CREATE" class="btn btn-primary">
+            <input id="create-game-btn" type="submit" value="CREATE" class="btn btn-primary">
         </form>
         <table id="game-list" class="table table-secondary table-striped my-3">
             <thead>
@@ -61,6 +61,9 @@
 
             </tbody>
         </table>
+    </section>
+    <section id="game-view" class="container my-5">
+        Test
     </section>
 </body>
 
