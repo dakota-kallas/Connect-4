@@ -27,7 +27,7 @@ let defaultTheme = new Theme(
   TokenDB.getTokenByName("Green Girl")
 );
 
-let meta = new Metadata(defaultTheme, validTokens);
+let meta = new Metadata(defaultTheme, TokenDB.getTokens());
 
 // Routes
 
@@ -35,12 +35,21 @@ router.get("/meta/", function (req, res, next) {
   res.status(200).send(meta);
 });
 
-router.get("/sids/:sid/gids/:gid", function (req, res, next) {
+router.get("/gids/:gid", function (req, res, next) {
   res.status(200).send(GameDB.getGameById(gid));
 });
 
-router.post("/sids/:sid/gids/:gid", function (req, res, next) {
+router.post("/gids/:gid", function (req, res, next) {
   res.status(200).send(GameDB.addToken(req.params.gid, req.params.move));
+});
+
+router.post("/", function (req, res, next) {
+  let theme = new theme(
+    req.body.color,
+    TokenDB.getTokenByName(req.body.playerToken),
+    TokenDB.getTokenByName(req.body.computerToken)
+  );
+  res.status(200).send(new GameDB.Game(theme, Date.now));
 });
 
 module.exports = router;

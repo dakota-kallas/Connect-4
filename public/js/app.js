@@ -5,7 +5,40 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function listView() {
   $("#game-list-view").show("slow");
-  $("#game-view").hide("slow");
+  $("#game-view").hide("fast");
+  updateTokens();
+}
+
+function gameView(game) {
+  $("#game-list-view").hide("slow");
+  $("#game-view").show("slow");
+}
+
+function updateTokens() {
+  fetch(`/api/v1/meta`)
+    .then((res) => res.json())
+    .then((thing) =>
+      thing.tokens.forEach((token) => {
+        addToSelect(token);
+      })
+    );
+}
+
+function addToSelect(token) {
+  let player = $("#player-select");
+  player.append(
+    $("<option>", {
+      value: token.name,
+      text: token.name,
+    })
+  );
+  let computer = $("#computer-select");
+  computer.append(
+    $("<option>", {
+      value: token.name,
+      text: token.name,
+    })
+  );
 }
 
 function createGame(evt) {
@@ -26,5 +59,5 @@ function createGame(evt) {
       "Content-Type": "application/json",
     },
   };
-  fetch(`/api/v1/sids/:sid`, options);
+  fetch(`/api/v1/`, options).then(gameView);
 }
