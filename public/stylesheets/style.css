@@ -63,8 +63,15 @@ a {
   padding: 0;
 }
 
-#game-view {
+#game-board {
   border: 1px solid gray;
   width: fit-content;
   padding: 0;
+}
+
+#game-list img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid black;
 }

@@ -7,6 +7,7 @@ let TokenDB = require("../models/Token.js");
 let Theme = require("../models/Theme.js");
 let Metadata = require("../models/Metadata.js");
 let Error = require("../models/Error.js");
+let SessionDB = require("../models/Session.js");
 
 new TokenDB.Token(
   "Kenny",
@@ -35,21 +36,33 @@ router.get("/meta/", function (req, res, next) {
   res.status(200).send(meta);
 });
 
-router.get("/gids/:gid", function (req, res, next) {
+router.post("/sids/", function (req, res, next) {
+  res.status(200).send(new SessionDB.Session());
+});
+
+router.get("/sids/:sid", function (req, res, next) {
+  let sessionGIDs = SessionDB.getGamesBySID(req.params.sid);
+  res.status(200).send(GameDB.getGamesFromList(sessionGIDs));
+  //res.status(200).send(sessionGIDs);
+});
+
+router.get("/sids/:sid/gids/:gid", function (req, res, next) {
   res.status(200).send(GameDB.getGameById(gid));
 });
 
-router.post("/gids/:gid", function (req, res, next) {
+router.post("/sids/:sid/gids/:gid", function (req, res, next) {
   res.status(200).send(GameDB.addToken(req.params.gid, req.params.move));
 });
 
-router.post("/", function (req, res, next) {
+router.post("/sids/:sid", function (req, res, next) {
   let theme = new Theme(
     req.body.color,
     TokenDB.getTokenByName(req.body.playerToken),
     TokenDB.getTokenByName(req.body.computerToken)
   );
-  res.json(new GameDB.Game(theme, Date.now()));
+  let game = new GameDB.Game(theme);
+  SessionDB.addGame(req.params.sid, game.id);
+  res.json(game);
 });
 
 module.exports = router;

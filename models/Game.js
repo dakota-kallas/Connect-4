@@ -3,9 +3,9 @@ const { v4: uuidv4 } = require("uuid");
 const GAMES = {};
 
 class Game {
-  constructor(theme, start) {
+  constructor(theme) {
     this.theme = theme;
-    this.start = start;
+    this.start = new Date(Date.now());
     this.end = undefined;
     this.status = Statuses.UNFINISHED;
     this.id = uuidv4();
@@ -32,6 +32,19 @@ const Statuses = {
  * @returns All declared GAMES
  */
 function getGames() {
+  let result = Object.values(GAMES);
+  return result.map((game) => Object.assign({}, game));
+}
+
+/**
+ * PRE: A valid list of GIDs is provided
+ * @param {ids[]} games
+ * @returns
+ */
+function getGamesFromList(gameList) {
+  // let result = Object.values(
+  //   GAMES.filter((game) => gameList.includes(game.id))
+  // );
   let result = Object.values(GAMES);
   return result.map((game) => Object.assign({}, game));
 }
@@ -80,6 +93,7 @@ module.exports = {
   Game: Game,
   Statuses: Statuses,
   getGames: getGames,
+  getGamesFromList: getGamesFromList,
   getGameById: getGameById,
   getNextAvailableSlot: getNextAvailableSlot,
   addToken: addToken,
