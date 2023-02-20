@@ -44,12 +44,12 @@ router.post("/gids/:gid", function (req, res, next) {
 });
 
 router.post("/", function (req, res, next) {
-  let theme = new theme(
+  let theme = new Theme(
     req.body.color,
     TokenDB.getTokenByName(req.body.playerToken),
     TokenDB.getTokenByName(req.body.computerToken)
   );
-  res.status(200).send(new GameDB.Game(theme, Date.now));
+  res.json(new GameDB.Game(theme, Date.now()));
 });
 
 module.exports = router;
