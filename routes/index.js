@@ -69,8 +69,12 @@ router.get("/sids/:sid/gids/:gid", function (req, res, next) {
 router.post("/sids/:sid/gids/:gid", function (req, res, next) {
   try {
     let nextRow = GameDB.getNextAvailableSlot(req.params.gid, req.query.move);
-    let game = GameDB.addToken(req.params.gid, nextRow, req.query.move);
-    res.status(200).send(game);
+    if (nextRow < 0 || nextRow > 4) {
+      res.status(400).send("Invalid input. Please try again.");
+    } else {
+      let game = GameDB.addToken(req.params.gid, nextRow, req.query.move);
+      res.status(200).send(game);
+    }
   } catch (err) {
     res.status(500).send({ error: err.message });
   }

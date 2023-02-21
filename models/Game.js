@@ -22,10 +22,10 @@ class Game {
 }
 
 const Statuses = {
-  VICTORY: "Victory",
-  LOSS: "Loss",
-  UNFINISHED: "Unfinished",
-  TIE: "Tie",
+  VICTORY: "VICTORY",
+  LOSS: "LOSS",
+  UNFINISHED: "UNFINISHED",
+  TIE: "TIE",
 };
 
 /**
@@ -67,7 +67,7 @@ function getGameById(gid) {
 function getNextAvailableSlot(gid, column) {
   game = GAMES[gid];
 
-  for (let row = 4; row < game.grid.length; row--) {
+  for (let row = game.grid.length - 1; row >= 0; row--) {
     if (game.grid[row][column] === " ") {
       return row;
     }
@@ -88,23 +88,131 @@ function addToken(gid, row, column) {
 
   if (game.grid[row][column] == " ") {
     game.grid[row][column] = "X";
-    //game.grid[row - 1][column] = "O";
 
     let computerMoved = false;
-    while (!computerMoved) {
-      let computerCol = Math.floor(Math.random() * 7);
-      let computerRow = getNextAvailableSlot(gid, computerCol);
-      if (computerRow == row && computerCol == column) {
-        computerRow--;
+    let computerCol;
+    let computerRow;
+    let isGridFull = isGridFull(game.grid);
+    if (!isGridFull) {
+      while (!computerMoved) {
+        computerCol = Math.floor(Math.random() * 7);
+        computerRow = getNextAvailableSlot(gid, computerCol);
+        if (computerRow == -1) {
+          continue;
+        } else if (computerRow == row && computerCol == column) {
+          if (computerRow == 0) {
+            continue;
+          }
+          computerRow--;
+        }
+        if (game.grid[computerRow][computerCol] == " ") {
+          game.grid[computerRow][computerCol] = "O";
+          computerMoved = true;
+        }
       }
-      if (game.grid[computerRow][computerCol] == " ") {
-        game.grid[computerRow][computerCol] = "O";
-        computerMoved = true;
+    }
+
+    let winner = checkForWin(game.grid);
+    if (winner) {
+      if (winner == "X") {
+        game.status = Statuses.VICTORY;
+        if (computerMoved) {
+          game.grid[computerRow][computerCol] = " ";
+        }
+      } else {
+        game.status = Statuses.LOSS;
       }
+      game.end = new Date(Date.now());
+    } else if (isGridFull) {
+      game.status = Statuses.TIE;
+      game.end = new Date(Date.now());
     }
   }
 
   return game;
+}
+
+/**
+ * @param {Game.grid} grid
+ * @returns The winning player or null if no one has won
+ */
+function checkForWin(grid) {
+  const rows = grid.length;
+  const cols = grid[0].length;
+
+  // Check for horizontal win
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols - 3; col++) {
+      if (
+        grid[row][col] !== " " &&
+        grid[row][col] === grid[row][col + 1] &&
+        grid[row][col] === grid[row][col + 2] &&
+        grid[row][col] === grid[row][col + 3]
+      ) {
+        return grid[row][col];
+      }
+    }
+  }
+
+  // Check for vertical win
+  for (let row = 0; row < rows - 3; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (
+        grid[row][col] !== " " &&
+        grid[row][col] === grid[row + 1][col] &&
+        grid[row][col] === grid[row + 2][col] &&
+        grid[row][col] === grid[row + 3][col]
+      ) {
+        return grid[row][col];
+      }
+    }
+  }
+
+  // Check for diagonal win (top-left to bottom-right)
+  for (let row = 0; row < rows - 3; row++) {
+    for (let col = 0; col < cols - 3; col++) {
+      if (
+        grid[row][col] !== " " &&
+        grid[row][col] === grid[row + 1][col + 1] &&
+        grid[row][col] === grid[row + 2][col + 2] &&
+        grid[row][col] === grid[row + 3][col + 3]
+      ) {
+        return grid[row][col];
+      }
+    }
+  }
+
+  // Check for diagonal win (top-right to bottom-left)
+  for (let row = 0; row < rows - 3; row++) {
+    for (let col = 3; col < cols; col++) {
+      if (
+        grid[row][col] !== " " &&
+        grid[row][col] === grid[row + 1][col - 1] &&
+        grid[row][col] === grid[row + 2][col - 2] &&
+        grid[row][col] === grid[row + 3][col - 3]
+      ) {
+        return grid[row][col];
+      }
+    }
+  }
+
+  // If no winning combinations are found, return null
+  return null;
+}
+
+/**
+ * @param {Game.grid} grid
+ * @returns a boolean representing if the grid is full
+ */
+function isGridFull(grid) {
+  for (let row = 0; row < grid.length; row++) {
+    for (let col = 0; col < grid[0].length; col++) {
+      if (grid[row][col] === " ") {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 module.exports = {

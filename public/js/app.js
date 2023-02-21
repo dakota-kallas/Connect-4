@@ -60,8 +60,9 @@ function addGames(games) {
     tr.append(ended);
     let view = $("<td>");
     let viewBtn = $("<button>");
-    viewBtn.addClass("btn btn-warning");
-    viewBtn.text("View");
+    viewBtn.addClass("btn");
+    viewBtn.css("background-color", game.theme.color);
+    viewBtn.text("view");
     viewBtn.click(function () {
       gameView(game);
     });
@@ -81,12 +82,12 @@ function gameView(game) {
   // CLEAR OUT CONTENTS
   $(".cell").empty();
   $(".drop-cell").empty();
+  $("#game-status").empty();
   $(".cell").off();
   $(".drop-cell").off();
   $("#game-return-btn").off();
 
   $("#game-list-view").hide();
-  $("#game-view").show("slow");
   $("#connect4-board").css("background-color", game.theme.color);
   for (let y = 0; y < 5; y++) {
     for (let x = 0; x < 7; x++) {
@@ -114,33 +115,40 @@ function gameView(game) {
       }
     }
   }
-  $(".drop-cell").hover(
-    function () {
-      var img = $("<img>");
-      img.attr("src", game.theme.playerToken.url);
-      img.attr("alt", game.theme.playerToken.name);
-      $(this).append(img);
-    },
-    function () {
-      $(this).find("img").remove();
-    }
-  );
-  $(".drop-cell").click(function () {
-    let index = $(this).index();
-    let options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+
+  if (game.status == "UNFINISHED") {
+    $(".drop-cell").hover(
+      function () {
+        var img = $("<img>");
+        img.attr("src", game.theme.playerToken.url);
+        img.attr("alt", game.theme.playerToken.name);
+        $(this).append(img);
       },
-    };
-    fetch(`/api/v1/sids/${SID}/gids/${game.id}?move=${index}`, options)
-      .then((response) => response.json())
-      .then((game) => gameView(game));
-  });
+      function () {
+        $(this).find("img").remove();
+      }
+    );
+    $(".drop-cell").click(function () {
+      let index = $(this).index();
+      let options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      fetch(`/api/v1/sids/${SID}/gids/${game.id}?move=${index}`, options)
+        .then((response) => response.json())
+        .then((game) => gameView(game));
+    });
+  }
 
   $("#game-return-btn").click(function () {
     listView();
   });
+  let statusSpan = $("<span>");
+  statusSpan.text(game.status);
+  $("#game-status").append(statusSpan);
+  $("#game-view").show("slow");
 }
 
 function updateTokens() {
