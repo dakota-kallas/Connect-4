@@ -18,7 +18,7 @@ class Session {
  */
 function getGamesBySID(sid) {
   let games = SESSIONS[sid].games;
-  return games && Object.assign({}, games);
+  return games && Object.values(games);
 }
 
 /**

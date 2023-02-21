@@ -15,23 +15,20 @@ function setupSession() {
     .then((session) => {
       SID = session.id;
     })
+    .then(updateTokens)
     .then(listView);
 }
 
 function listView() {
   $("#game-view").hide();
   $("#game-list-view").show("slow");
-  updateTokens();
-  let span = $("<span>");
-  span.text(SID + " ");
-  $("#game-list-view").append(span);
   fetch(`/api/v1/sids/${SID}`)
     .then((res) => res.json())
     .then((games) => addGames(games));
 }
 
 /**
- *
+ * Add all of the sessions games to the game list
  * @param {Game[]} games
  */
 function addGames(games) {
@@ -76,7 +73,18 @@ function addGames(games) {
   $("#game-list-body").append(rows);
 }
 
+/**
+ * Setup the view of a game for the user
+ * @param {Game} game
+ */
 function gameView(game) {
+  // CLEAR OUT CONTENTS
+  $(".cell").empty();
+  $(".drop-cell").empty();
+  $(".cell").off();
+  $(".drop-cell").off();
+  $("#game-return-btn").off();
+
   $("#game-list-view").hide();
   $("#game-view").show("slow");
   $("#connect4-board").css("background-color", game.theme.color);
@@ -84,12 +92,22 @@ function gameView(game) {
     for (let x = 0; x < 7; x++) {
       let token = game.grid[y][x];
       if (token == "X") {
-        let selectedCell = $(".row").eq(x).find(".cell").eq(y);
+        let selectedCell = $(".row").eq(y).find(".cell").eq(x);
         let img = $("<img>");
 
         // Set the src and alt attributes of the image element
         img.attr("src", game.theme.playerToken.url);
         img.attr("alt", game.theme.playerToken.name);
+
+        // Append the image element to the selected cell
+        selectedCell.append(img);
+      } else if (token == "O") {
+        let selectedCell = $(".row").eq(y).find(".cell").eq(x);
+        let img = $("<img>");
+
+        // Set the src and alt attributes of the image element
+        img.attr("src", game.theme.computerToken.url);
+        img.attr("alt", game.theme.computerToken.name);
 
         // Append the image element to the selected cell
         selectedCell.append(img);
@@ -108,8 +126,16 @@ function gameView(game) {
     }
   );
   $(".drop-cell").click(function () {
-    var index = $(this).index();
-    alert("You clicked on cell " + index);
+    let index = $(this).index();
+    let options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(`/api/v1/sids/${SID}/gids/${game.id}?move=${index}`, options)
+      .then((response) => response.json())
+      .then((game) => gameView(game));
   });
 
   $("#game-return-btn").click(function () {
@@ -118,6 +144,8 @@ function gameView(game) {
 }
 
 function updateTokens() {
+  $("#computer-select").empty();
+  $("#player-select").empty();
   fetch(`/api/v1/meta`)
     .then((res) => res.json())
     .then((thing) =>

@@ -36,24 +36,19 @@ router.get("/meta/", function (req, res, next) {
   res.status(200).send(meta);
 });
 
+// CREATE NEW SESSION
 router.post("/sids/", function (req, res, next) {
   res.status(200).send(new SessionDB.Session());
 });
 
+// GET GAMES FOR SESSION
 router.get("/sids/:sid", function (req, res, next) {
   let sessionGIDs = SessionDB.getGamesBySID(req.params.sid);
-  res.status(200).send(GameDB.getGamesFromList(sessionGIDs));
-  //res.status(200).send(sessionGIDs);
+  let games = GameDB.getGamesFromList(sessionGIDs);
+  res.status(200).send(games);
 });
 
-router.get("/sids/:sid/gids/:gid", function (req, res, next) {
-  res.status(200).send(GameDB.getGameById(gid));
-});
-
-router.post("/sids/:sid/gids/:gid", function (req, res, next) {
-  res.status(200).send(GameDB.addToken(req.params.gid, req.params.move));
-});
-
+// CREATE NEW GAME
 router.post("/sids/:sid", function (req, res, next) {
   let theme = new Theme(
     req.body.color,
@@ -63,6 +58,22 @@ router.post("/sids/:sid", function (req, res, next) {
   let game = new GameDB.Game(theme);
   SessionDB.addGame(req.params.sid, game.id);
   res.json(game);
+});
+
+// GET GAME FROM ID
+router.get("/sids/:sid/gids/:gid", function (req, res, next) {
+  res.status(200).send(GameDB.getGameById(gid));
+});
+
+// MAKE A MOVE
+router.post("/sids/:sid/gids/:gid", function (req, res, next) {
+  try {
+    let nextRow = GameDB.getNextAvailableSlot(req.params.gid, req.query.move);
+    let game = GameDB.addToken(req.params.gid, nextRow, req.query.move);
+    res.status(200).send(game);
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 });
 
 module.exports = router;

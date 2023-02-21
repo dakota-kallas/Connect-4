@@ -42,10 +42,8 @@ function getGames() {
  * @returns
  */
 function getGamesFromList(gameList) {
-  // let result = Object.values(
-  //   GAMES.filter((game) => gameList.includes(game.id))
-  // );
-  let result = Object.values(GAMES);
+  let gamesArray = Object.values(GAMES);
+  let result = gamesArray.filter((game) => gameList.includes(game.id));
   return result.map((game) => Object.assign({}, game));
 }
 
@@ -67,8 +65,9 @@ function getGameById(gid) {
  * @returns
  */
 function getNextAvailableSlot(gid, column) {
-  let game = GAMES[gid];
-  for (let row = 0; row < game.grid.length; row++) {
+  game = GAMES[gid];
+
+  for (let row = 4; row < game.grid.length; row--) {
     if (game.grid[row][column] === " ") {
       return row;
     }
@@ -84,9 +83,28 @@ function getNextAvailableSlot(gid, column) {
  * @param {int} column
  * @param {boolean} player
  */
-function addToken(gid, row, column, player) {
+function addToken(gid, row, column) {
   let game = GAMES[gid];
-  game.grid[row][column] = player ? "X" : "O";
+
+  if (game.grid[row][column] == " ") {
+    game.grid[row][column] = "X";
+    //game.grid[row - 1][column] = "O";
+
+    let computerMoved = false;
+    while (!computerMoved) {
+      let computerCol = Math.floor(Math.random() * 7);
+      let computerRow = getNextAvailableSlot(gid, computerCol);
+      if (computerRow == row && computerCol == column) {
+        computerRow--;
+      }
+      if (game.grid[computerRow][computerCol] == " ") {
+        game.grid[computerRow][computerCol] = "O";
+        computerMoved = true;
+      }
+    }
+  }
+
+  return game;
 }
 
 module.exports = {
