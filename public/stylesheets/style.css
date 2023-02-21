@@ -45,6 +45,10 @@ a {
   top: -2px;
 }
 
+select:hover {
+  cursor: pointer;
+}
+
 .drop-cell {
   width: 110px;
   height: 110px;

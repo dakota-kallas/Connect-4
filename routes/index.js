@@ -10,22 +10,22 @@ let Error = require("../models/Error.js");
 let SessionDB = require("../models/Session.js");
 
 new TokenDB.Token(
-  "Kenny",
+  "Sailor Boy",
   "https://charity.cs.uwlax.edu/assets/avatars/avatar37.gif"
 );
 new TokenDB.Token(
-  "Green Girl",
+  "Popcorn",
   "https://charity.cs.uwlax.edu/assets/avatars/avatar34.gif"
 );
 new TokenDB.Token(
-  "Alien",
+  "T-Rex",
   "https://charity.cs.uwlax.edu/assets/avatars/avatar33.gif"
 );
 
 let defaultTheme = new Theme(
   "#FF0000",
-  TokenDB.getTokenByName("Kenny"),
-  TokenDB.getTokenByName("Green Girl")
+  TokenDB.getTokenByName("Sailor Boy"),
+  TokenDB.getTokenByName("Popcorn")
 );
 
 let meta = new Metadata(defaultTheme, TokenDB.getTokens());
@@ -33,7 +33,11 @@ let meta = new Metadata(defaultTheme, TokenDB.getTokens());
 // Routes
 
 router.get("/meta/", function (req, res, next) {
-  res.status(200).send(meta);
+  try {
+    res.status(200).send(meta);
+  } catch (err) {
+    res.status(200).send(new Error(err.message));
+  }
 });
 
 // CREATE NEW SESSION
@@ -43,15 +47,20 @@ router.post("/sids/", function (req, res, next) {
 
 // GET GAMES FOR SESSION
 router.get("/sids/:sid", function (req, res, next) {
-  let sessionGIDs = SessionDB.getGamesBySID(req.params.sid);
-  let games = GameDB.getGamesFromList(sessionGIDs);
-  res.status(200).send(games);
+  try {
+    let sessionGIDs = SessionDB.getGamesBySID(req.params.sid);
+    let games = GameDB.getGamesFromList(sessionGIDs);
+    res.status(200).send(games);
+  } catch (err) {
+    res.status(200).send(new Error(err.message));
+  }
 });
 
 // CREATE NEW GAME
 router.post("/sids/:sid", function (req, res, next) {
+  let color = req.query.color ? `#${req.query.color}` : "#FF0000";
   let theme = new Theme(
-    req.body.color,
+    color,
     TokenDB.getTokenByName(req.body.playerToken),
     TokenDB.getTokenByName(req.body.computerToken)
   );
@@ -62,7 +71,11 @@ router.post("/sids/:sid", function (req, res, next) {
 
 // GET GAME FROM ID
 router.get("/sids/:sid/gids/:gid", function (req, res, next) {
-  res.status(200).send(GameDB.getGameById(gid));
+  try {
+    res.status(200).send(GameDB.getGameById(gid));
+  } catch (err) {
+    res.status(200).send(new Error(err.message));
+  }
 });
 
 // MAKE A MOVE
@@ -76,7 +89,7 @@ router.post("/sids/:sid/gids/:gid", function (req, res, next) {
       res.status(200).send(game);
     }
   } catch (err) {
-    res.status(500).send({ error: err.message });
+    res.status(200).send(new Error(err.message));
   }
 });
 

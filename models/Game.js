@@ -89,11 +89,20 @@ function addToken(gid, row, column) {
   if (game.grid[row][column] == " ") {
     game.grid[row][column] = "X";
 
+    let winner = checkForWin(game.grid);
+    if (winner) {
+      if (winner == "X") {
+        game.status = Statuses.VICTORY;
+        game.end = new Date(Date.now());
+      }
+    }
+
     let computerMoved = false;
     let computerCol;
     let computerRow;
-    let isGridFull = isGridFull(game.grid);
-    if (!isGridFull) {
+    let gridFull = isGridFull(game.grid);
+
+    if (!gridFull) {
       while (!computerMoved) {
         computerCol = Math.floor(Math.random() * 7);
         computerRow = getNextAvailableSlot(gid, computerCol);
@@ -110,20 +119,15 @@ function addToken(gid, row, column) {
           computerMoved = true;
         }
       }
-    }
 
-    let winner = checkForWin(game.grid);
-    if (winner) {
-      if (winner == "X") {
-        game.status = Statuses.VICTORY;
-        if (computerMoved) {
-          game.grid[computerRow][computerCol] = " ";
+      winner = checkForWin(game.grid);
+      if (winner) {
+        if (winner == "O") {
+          game.status = Statuses.LOSS;
+          game.end = new Date(Date.now());
         }
-      } else {
-        game.status = Statuses.LOSS;
       }
-      game.end = new Date(Date.now());
-    } else if (isGridFull) {
+    } else {
       game.status = Statuses.TIE;
       game.end = new Date(Date.now());
     }

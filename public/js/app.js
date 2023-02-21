@@ -52,11 +52,29 @@ function addGames(games) {
     computerImg.attr("alt", game.theme.computerToken.name);
     computer.append(computerImg);
     tr.append(computer);
+
     let started = $("<td>");
-    started.text(game.start);
+    let date = new Date(game.start);
+    const options = {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    started.text(
+      date.toLocaleString("en-US", options).replace(",", "").replace(",", "")
+    );
     tr.append(started);
     let ended = $("<td>");
-    ended.text(game.end ?? "-");
+    if (game.end) {
+      date = new Date(game.end);
+      ended.text(
+        date.toLocaleString("en-US", options).replace(",", "").replace(",", "")
+      );
+    } else {
+      ended.text("-");
+    }
+
     tr.append(ended);
     let view = $("<td>");
     let viewBtn = $("<button>");
@@ -143,6 +161,7 @@ function gameView(game) {
   }
 
   $("#game-return-btn").click(function () {
+    updateTokens();
     listView();
   });
   let statusSpan = $("<span>");
@@ -156,33 +175,36 @@ function updateTokens() {
   $("#player-select").empty();
   fetch(`/api/v1/meta`)
     .then((res) => res.json())
-    .then((thing) =>
-      thing.tokens.forEach((token) => {
-        addToSelect(token);
-      })
-    );
+    .then((metadata) => setupSelect(metadata.tokens, metadata.default));
 }
 
-function addToSelect(token) {
+function setupSelect(tokens, defaultTheme) {
   let player = $("#player-select");
-  player.append(
-    $("<option>", {
-      value: token.name,
-      text: token.name,
-    })
-  );
   let computer = $("#computer-select");
-  computer.append(
-    $("<option>", {
+  for (token of tokens) {
+    let playerOption = $("<option>", {
       value: token.name,
       text: token.name,
-    })
-  );
+    });
+    if (token.name == defaultTheme.playerToken.name) {
+      playerOption.attr("selected", "selected");
+    }
+    player.append(playerOption);
+    let computerOption = $("<option>", {
+      value: token.name,
+      text: token.name,
+    });
+    if (token.name == defaultTheme.computerToken.name) {
+      computerOption.attr("selected", "selected");
+    }
+    computer.append(computerOption);
+  }
+  $("#color-select").val(defaultTheme.color);
 }
 
 function createGame(evt) {
   evt.preventDefault();
-  let color = $("#color-select").val();
+  let color = $("#color-select").val().replace("#", "");
   let playerToken = $("#player-select").val();
   let computerToken = $("#computer-select").val();
   if (!color || !playerToken || !computerToken) return;
@@ -194,7 +216,6 @@ function createGame(evt) {
   let options = {
     method: "POST",
     body: JSON.stringify({
-      color: color,
       playerToken: playerToken,
       computerToken: computerToken,
     }),
@@ -202,7 +223,7 @@ function createGame(evt) {
       "Content-Type": "application/json",
     },
   };
-  fetch(`/api/v1/sids/${SID}`, options)
+  fetch(`/api/v1/sids/${SID}?color=${color}`, options)
     .then((response) => response.json())
     .then((game) => gameView(game));
 }
