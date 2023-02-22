@@ -22,6 +22,18 @@ new TokenDB.Token(
   "T-Rex",
   "https://charity.cs.uwlax.edu/assets/avatars/avatar33.gif"
 );
+new TokenDB.Token(
+  "Carl",
+  "https://charity.cs.uwlax.edu/assets/avatars/avatar16.gif"
+);
+new TokenDB.Token(
+  "Motorcycle",
+  "https://charity.cs.uwlax.edu/assets/avatars/avatar46.gif"
+);
+new TokenDB.Token(
+  "Nuclear",
+  "https://charity.cs.uwlax.edu/assets/avatars/avatar152.gif"
+);
 
 let defaultTheme = new Theme(
   "#FF0000",

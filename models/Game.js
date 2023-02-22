@@ -94,6 +94,7 @@ function addToken(gid, row, column) {
       if (winner == "X") {
         game.status = Statuses.VICTORY;
         game.end = new Date(Date.now());
+        return game;
       }
     }
 

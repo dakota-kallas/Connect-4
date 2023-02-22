@@ -16,6 +16,16 @@ a {
   padding: 0.5rem 1rem;
 }
 
+#color-select {
+  width: 50px;
+  flex: unset;
+}
+
+.color-input-group {
+  width: fit-content !important;
+  flex-wrap: nowrap;
+}
+
 #token-drop {
   display: flex;
   flex-direction: column;
