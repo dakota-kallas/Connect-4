@@ -105,9 +105,11 @@ function gameView(game) {
   $(".cell").empty();
   $(".drop-cell").empty();
   $("#game-status").empty();
+  $("#status-gif-container").empty();
   $(".cell").off();
   $(".drop-cell").off();
   $("#game-return-btn").off();
+  $("#drop-row").show();
 
   $("#game-list-view").hide();
   $("#connect4-board").css("background-color", game.theme.color);
@@ -117,22 +119,15 @@ function gameView(game) {
       if (token == "X") {
         let selectedCell = $(".row").eq(y).find(".cell").eq(x);
         let img = $("<img>");
-
-        // Set the src and alt attributes of the image element
         img.attr("src", game.theme.playerToken.url);
         img.attr("alt", game.theme.playerToken.name);
 
-        // Append the image element to the selected cell
         selectedCell.append(img);
       } else if (token == "O") {
         let selectedCell = $(".row").eq(y).find(".cell").eq(x);
         let img = $("<img>");
-
-        // Set the src and alt attributes of the image element
         img.attr("src", game.theme.computerToken.url);
         img.attr("alt", game.theme.computerToken.name);
-
-        // Append the image element to the selected cell
         selectedCell.append(img);
       }
     }
@@ -141,7 +136,7 @@ function gameView(game) {
   if (game.status == "UNFINISHED") {
     $(".drop-cell").hover(
       function () {
-        var img = $("<img>");
+        let img = $("<img>");
         img.attr("src", game.theme.playerToken.url);
         img.attr("alt", game.theme.playerToken.name);
         $(this).append(img);
@@ -165,6 +160,24 @@ function gameView(game) {
         .then((response) => response.json())
         .then((game) => gameView(game));
     });
+  } else if (game.status == "LOSS") {
+    let img = $("<img>");
+    img.addClass("w-100");
+    img.addClass("h-100");
+    img.attr("src", "./assets/cry.gif");
+    img.attr("alt", "You've lost!");
+    $("#status-gif-container").append(img);
+    $("#status-gif-container").addClass("w-100");
+    $("#drop-row").hide();
+  } else if (game.status == "VICTORY") {
+    let img = $("<img>");
+    img.addClass("w-100");
+    img.addClass("h-100");
+    img.attr("src", "./assets/winner.gif");
+    img.attr("alt", "You've lost!");
+    $("#status-gif-container").append(img);
+    $("#status-gif-container").addClass("w-100");
+    $("#drop-row").hide();
   }
 
   $("#game-return-btn").click(function () {

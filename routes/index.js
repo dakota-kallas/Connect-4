@@ -10,30 +10,12 @@ let Metadata = require("../models/Metadata.js");
 let Error = require("../models/Error.js");
 let SessionDB = require("../models/Session.js");
 
-new TokenDB.Token(
-  "Sailor Boy",
-  "https://charity.cs.uwlax.edu/assets/avatars/avatar37.gif"
-);
-new TokenDB.Token(
-  "Popcorn",
-  "https://charity.cs.uwlax.edu/assets/avatars/avatar34.gif"
-);
-new TokenDB.Token(
-  "T-Rex",
-  "https://charity.cs.uwlax.edu/assets/avatars/avatar33.gif"
-);
-new TokenDB.Token(
-  "Carl",
-  "https://charity.cs.uwlax.edu/assets/avatars/avatar16.gif"
-);
-new TokenDB.Token(
-  "Motorcycle",
-  "https://charity.cs.uwlax.edu/assets/avatars/avatar46.gif"
-);
-new TokenDB.Token(
-  "Nuclear",
-  "https://charity.cs.uwlax.edu/assets/avatars/avatar152.gif"
-);
+new TokenDB.Token("Sailor Boy", "./assets/sailorboy.gif");
+new TokenDB.Token("Popcorn", "./assets/popcorn.gif");
+new TokenDB.Token("T-Rex", "./assets/trex.gif");
+new TokenDB.Token("Carl", "./assets/carl.gif");
+new TokenDB.Token("Motorcycle", "./assets/motorcycle.gif");
+new TokenDB.Token("Nuclear", "./assets/nuclear.gif");
 
 let defaultTheme = new Theme(
   "#FF0000",

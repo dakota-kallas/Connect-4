@@ -34,8 +34,12 @@ select:hover {
   flex-direction: column;
   gap: 4px;
   margin: 0 auto;
-  width: max-content;
+  height: 130px;
   padding: 0.5rem 1rem;
+}
+
+#status-gif-container {
+  max-height: 110px;
 }
 
 #game-board {
@@ -57,7 +61,7 @@ select:hover {
 }
 
 .row,
-.drop-row {
+#drop-row {
   display: flex;
   flex-direction: row;
   gap: 4px;
