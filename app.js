@@ -12,8 +12,13 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
-app.set("base", "/connectfour");
+app.use("/connectfour", express.static(path.join(__dirname, "public")));
+
+// Route for the base URL
+app.get("/", (req, res) => {
+  // Redirect to the /connectfour route
+  res.redirect("/connectfour");
+});
 
 app.use("/connectfour/api/v1", indexRouter);
 
