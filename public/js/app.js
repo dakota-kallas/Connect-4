@@ -10,7 +10,7 @@ function setupSession() {
     method: "POST",
   };
 
-  fetch(`/api/v1/sids`, options)
+  fetch(`/connectfour/api/v1/sids`, options)
     .then((res) => res.json())
     .then((session) => {
       SID = session.id;
@@ -23,7 +23,7 @@ function listView() {
   $("#game-view").hide();
   $("#validation-container").empty();
   $("#game-list-view").show();
-  fetch(`/api/v1/sids/${SID}`)
+  fetch(`/connectfour/api/v1/sids/${SID}`)
     .then((res) => res.json())
     .then((games) => addGames(games));
 }
@@ -79,7 +79,7 @@ function addGames(games) {
     viewBtn.css("background-color", game.theme.color);
     viewBtn.text("view");
     viewBtn.click(function () {
-      fetch(`/api/v1/sids/${SID}/gids/${game.id}`)
+      fetch(`/connectfour/api/v1/sids/${SID}/gids/${game.id}`)
         .then((res) => res.json())
         .then((resObj) => {
           if (!resObj.msg) {
@@ -159,7 +159,10 @@ function gameView(game) {
           "Content-Type": "application/json",
         },
       };
-      fetch(`/api/v1/sids/${SID}/gids/${game.id}?move=${index}`, options)
+      fetch(
+        `/connectfour/api/v1/sids/${SID}/gids/${game.id}?move=${index}`,
+        options
+      )
         .then((response) => response.json())
         .then((game) => gameView(game));
     });
@@ -178,7 +181,7 @@ function gameView(game) {
 function updateTokens() {
   $("#computer-select").empty();
   $("#player-select").empty();
-  fetch(`/api/v1/meta`)
+  fetch(`/connectfour/api/v1/meta`)
     .then((res) => res.json())
     .then((metadata) => setupSelect(metadata.tokens, metadata.default));
 }
@@ -230,7 +233,7 @@ function createGame(evt) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   };
-  fetch(`/api/v1/sids/${SID}?color=${color}`, options)
+  fetch(`/connectfour/api/v1/sids/${SID}?color=${color}`, options)
     .then((response) => response.json())
     .then((resObj) => {
       if (!resObj.msg) {
