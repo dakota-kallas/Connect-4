@@ -11,9 +11,8 @@ function setupSession() {
   };
 
   fetch(`/connectfour/api/v1/sids`, options)
-    .then((res) => res.json())
-    .then((session) => {
-      SID = session.id;
+    .then((res) => {
+      SID = res.headers.get("X-sid");
     })
     .then(updateTokens)
     .then(listView);

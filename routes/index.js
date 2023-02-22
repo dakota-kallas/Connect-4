@@ -55,7 +55,9 @@ router.get("/meta/", function (req, res, next) {
 
 // CREATE NEW SESSION
 router.post("/sids/", function (req, res, next) {
-  res.status(200).send(new SessionDB.Session());
+  const session = new SessionDB.Session();
+  res.setHeader("X-sid", session.id);
+  res.status(200).send();
 });
 
 // GET GAMES FOR SESSION
