@@ -21,7 +21,8 @@ function setupSession() {
 
 function listView() {
   $("#game-view").hide();
-  $("#game-list-view").show("slow");
+  $("#validation-container").empty();
+  $("#game-list-view").show();
   fetch(`/api/v1/sids/${SID}`)
     .then((res) => res.json())
     .then((games) => addGames(games));
@@ -61,16 +62,12 @@ function addGames(games) {
       month: "short",
       day: "numeric",
     };
-    started.text(
-      date.toLocaleString("en-US", options).replace(",", "").replace(",", "")
-    );
+    started.text(date.toLocaleString("en-US", options).replace(/,/g, ""));
     tr.append(started);
     let ended = $("<td>");
     if (game.end) {
       date = new Date(game.end);
-      ended.text(
-        date.toLocaleString("en-US", options).replace(",", "").replace(",", "")
-      );
+      ended.text(date.toLocaleString("en-US", options).replace(/,/g, ""));
     } else {
       ended.text("-");
     }
@@ -82,7 +79,15 @@ function addGames(games) {
     viewBtn.css("background-color", game.theme.color);
     viewBtn.text("view");
     viewBtn.click(function () {
-      gameView(game);
+      fetch(`/api/v1/sids/${SID}/gids/${game.id}`)
+        .then((res) => res.json())
+        .then((resObj) => {
+          if (!resObj.msg) {
+            gameView(resObj);
+          } else {
+            $("#validation-container").text(`*${resObj.msg}`);
+          }
+        });
     });
     view.append(viewBtn);
     tr.append(view);
@@ -167,7 +172,7 @@ function gameView(game) {
   let statusSpan = $("<span>");
   statusSpan.text(game.status);
   $("#game-status").append(statusSpan);
-  $("#game-view").show("slow");
+  $("#game-view").show();
 }
 
 function updateTokens() {
@@ -204,6 +209,7 @@ function setupSelect(tokens, defaultTheme) {
 
 function createGame(evt) {
   evt.preventDefault();
+  $("#validation-container").empty();
   let color = $("#color-select").val().replace("#", "");
   let playerToken = $("#player-select").val();
   let computerToken = $("#computer-select").val();
@@ -226,5 +232,11 @@ function createGame(evt) {
   };
   fetch(`/api/v1/sids/${SID}?color=${color}`, options)
     .then((response) => response.json())
-    .then((game) => gameView(game));
+    .then((resObj) => {
+      if (!resObj.msg) {
+        gameView(resObj);
+      } else {
+        $("#validation-container").text(`*${resObj.msg}`);
+      }
+    });
 }

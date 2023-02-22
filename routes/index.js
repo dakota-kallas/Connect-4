@@ -72,20 +72,28 @@ router.get("/sids/:sid", function (req, res, next) {
 // CREATE NEW GAME
 router.post("/sids/:sid", function (req, res, next) {
   let color = req.query.color ? `#${req.query.color}` : "#FF0000";
-  let theme = new Theme(
-    color,
-    TokenDB.getTokenByName(req.body.playerToken),
-    TokenDB.getTokenByName(req.body.computerToken)
-  );
-  let game = new GameDB.Game(theme);
-  SessionDB.addGame(req.params.sid, game.id);
-  res.json(game);
+  let playerToken = TokenDB.getTokenByName(req.body.playerToken);
+  let computerToken = TokenDB.getTokenByName(req.body.computerToken);
+  if (!color || !playerToken || !computerToken) {
+    res
+      .status(200)
+      .send(new Error("Invalid input(s) provided. Please try again."));
+  } else {
+    let theme = new Theme(color, playerToken, computerToken);
+    let game = new GameDB.Game(theme);
+    SessionDB.addGame(req.params.sid, game.id);
+    res.json(game);
+  }
 });
 
 // GET GAME FROM ID
 router.get("/sids/:sid/gids/:gid", function (req, res, next) {
   try {
-    res.status(200).send(GameDB.getGameById(gid));
+    if (SessionDB.isAuthenticatedGame(req.params.sid, req.params.gid)) {
+      res.status(200).send(GameDB.getGameById(req.params.gid));
+    } else {
+      throw new Error("Error loading game, try again later.");
+    }
   } catch (err) {
     res.status(200).send(new Error(err.message));
   }
