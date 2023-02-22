@@ -9,3 +9,11 @@ Connect 4 is an online multiplayer game that challenges players to strategically
 The game features an interactive interface that makes it easy for players to drop their tokens into the grid. The tokens slide downward to occupy the lowest non-occupied row of the selected column, allowing for strategic placement. The game also features real-time updates, so players can see the status of their opponent's moves and react accordingly.
 
 This project is designed to be fast, reliable, and engaging. Whether you're a seasoned Connect 4 player or just starting out, this online version of the classic game is sure to provide hours of fun and excitement.
+
+## Screenshots
+
+###### Game List
+<img width="1680" alt="Connect 4 Game View" src="https://github.com/dakota-kallas/Connect-4/blob/main/images/Landing.PNG">
+
+###### Game View
+<img width="1680" alt="Connect 4 Game List" src="https://github.com/dakota-kallas/Connect-4/blob/main/images/GameView.PNG">
