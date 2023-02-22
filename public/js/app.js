@@ -213,14 +213,15 @@ function createGame(evt) {
     return;
   }
 
+  let body = new URLSearchParams();
+  body.append("playerToken", playerToken);
+  body.append("computerToken", computerToken);
+
   let options = {
     method: "POST",
-    body: JSON.stringify({
-      playerToken: playerToken,
-      computerToken: computerToken,
-    }),
+    body: body,
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
   };
   fetch(`/api/v1/sids/${SID}?color=${color}`, options)

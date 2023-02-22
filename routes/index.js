@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+router.use(express.urlencoded({ extended: true }));
 
 // Fake Database
 let GameDB = require("../models/Game.js");
