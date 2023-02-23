@@ -5,6 +5,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 var SID = "empty";
 
+/**
+ * Create and setup a new session
+ */
 function setupSession() {
   let options = {
     method: "POST",
@@ -18,6 +21,9 @@ function setupSession() {
     .then(listView);
 }
 
+/**
+ * Setup the List view of the current sessions games
+ */
 function listView() {
   $("#game-view").hide();
   $("#validation-container").empty();
@@ -161,23 +167,9 @@ function gameView(game) {
         .then((game) => gameView(game));
     });
   } else if (game.status == "LOSS") {
-    let img = $("<img>");
-    img.addClass("w-100");
-    img.addClass("h-100");
-    img.attr("src", "./assets/cry.gif");
-    img.attr("alt", "You've lost!");
-    $("#status-gif-container").append(img);
-    $("#status-gif-container").addClass("w-100");
-    $("#drop-row").hide();
+    addStatusImage("./assets/cry.gif");
   } else if (game.status == "VICTORY") {
-    let img = $("<img>");
-    img.addClass("w-100");
-    img.addClass("h-100");
-    img.attr("src", "./assets/winner.gif");
-    img.attr("alt", "You've lost!");
-    $("#status-gif-container").append(img);
-    $("#status-gif-container").addClass("w-100");
-    $("#drop-row").hide();
+    addStatusImage("./assets/winner.gif");
   }
 
   $("#game-return-btn").click(function () {
@@ -190,6 +182,24 @@ function gameView(game) {
   $("#game-view").show();
 }
 
+/**
+ * Display an image at the top of the game according to the game status
+ * @param {String} location
+ */
+function addStatusImage(location) {
+  let img = $("<img>");
+  img.addClass("w-100");
+  img.addClass("h-100");
+  img.attr("src", location);
+  img.attr("alt", "Game Status");
+  $("#status-gif-container").append(img);
+  $("#status-gif-container").addClass("w-100");
+  $("#drop-row").hide();
+}
+
+/**
+ * Clear out the current contents of the player & computer selectors and get the defaults
+ */
 function updateTokens() {
   $("#computer-select").empty();
   $("#player-select").empty();
@@ -198,6 +208,11 @@ function updateTokens() {
     .then((metadata) => setupSelect(metadata.tokens, metadata.default));
 }
 
+/**
+ * Update the player & computer token selectors to the given settings
+ * @param {Token[]} tokens
+ * @param {Theme} defaultTheme
+ */
 function setupSelect(tokens, defaultTheme) {
   let player = $("#player-select");
   let computer = $("#computer-select");
@@ -222,6 +237,10 @@ function setupSelect(tokens, defaultTheme) {
   $("#color-select").val(defaultTheme.color);
 }
 
+/**
+ * Create a new Connect 4 game & get information ready to display
+ * @param {Event} evt
+ */
 function createGame(evt) {
   evt.preventDefault();
   $("#validation-container").empty();
