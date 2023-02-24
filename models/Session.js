@@ -17,6 +17,9 @@ class Session {
  * @returns All declared games for a given session
  */
 function getGamesBySID(sid) {
+  if (!isAuthenticatedSession(sid)) {
+    throw new Error("Unable to load games, try again later.");
+  }
   let games = SESSIONS[sid].games;
   return games && Object.values(games);
 }
@@ -37,12 +40,17 @@ function addGame(sid, gid) {
  * @returns A boolean on if the game is apart of the current session
  */
 function isAuthenticatedGame(sid, gid) {
-  return SESSIONS[sid].games[gid] != undefined;
+  return SESSIONS[sid].games[gid] != null;
+}
+
+function isAuthenticatedSession(sid) {
+  return SESSIONS[sid] != null;
 }
 
 module.exports = {
   Session: Session,
   addGame: addGame,
   isAuthenticatedGame: isAuthenticatedGame,
+  isAuthenticatedSession: isAuthenticatedSession,
   getGamesBySID: getGamesBySID,
 };

@@ -30,7 +30,13 @@ function listView() {
   $("#game-list-view").show();
   fetch(`/connectfour/api/v1/sids/${SID}`)
     .then((res) => res.json())
-    .then((games) => addGames(games));
+    .then((resObj) => {
+      if (!resObj.msg) {
+        addGames(resObj);
+      } else {
+        $("#validation-container").text(`*${resObj.msg}`);
+      }
+    });
 }
 
 /**

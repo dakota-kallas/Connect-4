@@ -7,7 +7,7 @@ let GameDB = require("../models/Game.js");
 let TokenDB = require("../models/Token.js");
 let Theme = require("../models/Theme.js");
 let Metadata = require("../models/Metadata.js");
-let Error = require("../models/Error.js");
+let ErrorReport = require("../models/Error.js");
 let SessionDB = require("../models/Session.js");
 
 new TokenDB.Token("Sailor Boy", "./assets/sailorboy.gif");
@@ -31,7 +31,7 @@ router.get("/meta/", function (req, res, next) {
   try {
     res.status(200).send(meta);
   } catch (err) {
-    res.status(200).send(new Error(err.message));
+    res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 
@@ -49,37 +49,44 @@ router.get("/sids/:sid", function (req, res, next) {
     let games = GameDB.getGamesFromList(sessionGIDs);
     res.status(200).send(games);
   } catch (err) {
-    res.status(200).send(new Error(err.message));
+    res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 
 // CREATE NEW GAME
 router.post("/sids/:sid", function (req, res, next) {
-  let color = req.query.color ? `#${req.query.color}` : "#FF0000";
-  let playerToken = TokenDB.getTokenByName(req.body.playerToken);
-  let computerToken = TokenDB.getTokenByName(req.body.computerToken);
-  if (!color || !playerToken || !computerToken) {
-    res
-      .status(200)
-      .send(new Error("Invalid input(s) provided. Please try again."));
-  } else {
+  try {
+    if (!SessionDB.isAuthenticatedSession(req.params.sid)) {
+      throw new Error("Unable to create game, try again later.");
+    }
+    let color = req.query.color ? `#${req.query.color}` : "#FF0000";
+    let playerToken = TokenDB.getTokenByName(req.body.playerToken);
+    let computerToken = TokenDB.getTokenByName(req.body.computerToken);
+    if (!color || !playerToken || !computerToken) {
+      throw new Error("Invalid input(s) provided. Please try again.");
+    }
     let theme = new Theme(color, playerToken, computerToken);
     let game = new GameDB.Game(theme);
     SessionDB.addGame(req.params.sid, game.id);
     res.json(game);
+  } catch (err) {
+    res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 
 // GET GAME FROM ID
 router.get("/sids/:sid/gids/:gid", function (req, res, next) {
   try {
-    if (SessionDB.isAuthenticatedGame(req.params.sid, req.params.gid)) {
+    if (
+      SessionDB.isAuthenticatedSession(req.params.sid) &&
+      SessionDB.isAuthenticatedGame(req.params.sid, req.params.gid)
+    ) {
       res.status(200).send(GameDB.getGameById(req.params.gid));
     } else {
-      throw new Error("Error loading game, try again later.");
+      throw new Error("Unable to load game, try again later.");
     }
   } catch (err) {
-    res.status(200).send(new Error(err.message));
+    res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 
@@ -94,7 +101,7 @@ router.post("/sids/:sid/gids/:gid", function (req, res, next) {
       res.status(200).send(game);
     }
   } catch (err) {
-    res.status(200).send(new Error(err.message));
+    res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 

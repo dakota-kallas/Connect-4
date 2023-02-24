@@ -54,6 +54,9 @@ function getGamesFromList(gameList) {
  */
 function getGameById(gid) {
   let game = GAMES[gid];
+  if (!game) {
+    throw new Error("Unable to load game, try again later.");
+  }
   return game && Object.assign({}, game);
 }
 
