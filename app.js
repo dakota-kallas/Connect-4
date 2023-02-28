@@ -23,16 +23,10 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use("/connectfour", express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
-// Route for the base URL
-app.get("/", (req, res) => {
-  // Redirect to the /connectfour route
-  res.redirect("/connectfour");
-});
-
-app.use("/connectfour/api/v2", authRouter);
-app.use("/connectfour/api/v2", indexRouter);
+app.use("/api/v2", authRouter);
+app.use("/api/v2", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

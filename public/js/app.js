@@ -1,4 +1,5 @@
 let authenticatedUser = null;
+let baseEndpoint = "/api/v2";
 
 window.addEventListener("DOMContentLoaded", () => {
   $("#create-game-btn").click(createGame);
@@ -26,7 +27,7 @@ function login() {
   formData.append("email", email);
   formData.append("password", password);
 
-  fetch("/connectfour/api/v2/login", {
+  fetch(`${baseEndpoint}/login`, {
     method: "POST",
     body: formData,
   })
@@ -48,7 +49,7 @@ function updateUserProfile(user) {
 }
 
 function logout() {
-  fetch("/connectfour/api/v2/logout", { method: "POST" }).then(loginView);
+  fetch(`${baseEndpoint}/logout`, { method: "POST" }).then(loginView);
 }
 
 /**
@@ -62,7 +63,7 @@ function listView() {
   $("#profile").show();
   $("#profile-dropdown").show();
 
-  fetch(`/connectfour/api/v2/`)
+  fetch(`${baseEndpoint}/`)
     .then((res) => res.json())
     .then((resObj) => {
       if (!resObj.msg) {
@@ -124,7 +125,7 @@ function addGames(games) {
     viewBtn.css("background-color", game.theme.color);
     viewBtn.text("view");
     viewBtn.click(function () {
-      fetch(`/connectfour/api/v2/gids/${game.id}`)
+      fetch(`${baseEndpoint}/gids/${game.id}`)
         .then((res) => res.json())
         .then((resObj) => {
           if (!resObj.msg) {
@@ -199,7 +200,7 @@ function gameView(game) {
           "Content-Type": "application/json",
         },
       };
-      fetch(`/connectfour/api/v2/gids/${game.id}?move=${index}`, options)
+      fetch(`${baseEndpoint}/gids/${game.id}?move=${index}`, options)
         .then((response) => response.json())
         .then((game) => gameView(game));
     });
@@ -240,7 +241,7 @@ function addStatusImage(location) {
 function updateTokens() {
   $("#computer-select").empty();
   $("#player-select").empty();
-  fetch(`/connectfour/api/v2/meta/`)
+  fetch(`${baseEndpoint}/meta/`)
     .then((res) => res.json())
     .then((metadata) => setupSelect(metadata.tokens, metadata.default));
 }
@@ -301,7 +302,7 @@ function createGame(evt) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   };
-  fetch(`/connectfour/api/v2?color=${color}`, options)
+  fetch(`${baseEndpoint}?color=${color}`, options)
     .then((response) => response.json())
     .then((resObj) => {
       if (!resObj.msg) {
