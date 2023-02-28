@@ -3,10 +3,21 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var session = require("express-session");
 
+var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
 
 var app = express();
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -20,6 +31,7 @@ app.get("/", (req, res) => {
   res.redirect("/connectfour");
 });
 
+app.use("/connectfour/api/v1", authRouter);
 app.use("/connectfour/api/v1", indexRouter);
 
 // catch 404 and forward to error handler
