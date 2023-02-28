@@ -56,7 +56,7 @@ router.get("/meta/", function (req, res, next) {
 /**
  * GET GAMES FOR USER
  */
-router.get("/gids", function (req, res, next) {
+router.get("/", function (req, res, next) {
   try {
     let games = GameDB.getGamesByOwner(req.session.user.id);
     res.status(200).send(games);
@@ -70,7 +70,7 @@ router.get("/gids", function (req, res, next) {
  *
  * TODO: VALIDATE USER
  */
-router.post("/gids", function (req, res, next) {
+router.post("/", function (req, res, next) {
   try {
     let color = req.query.color ? `#${req.query.color}` : "#FF0000";
     let playerToken = TokenDB.getTokenByName(req.body.playerToken);

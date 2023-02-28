@@ -62,7 +62,7 @@ function listView() {
   $("#profile").show();
   $("#profile-dropdown").show();
 
-  fetch(`/connectfour/api/v2/gids`)
+  fetch(`/connectfour/api/v2/`)
     .then((res) => res.json())
     .then((resObj) => {
       if (!resObj.msg) {
@@ -301,7 +301,7 @@ function createGame(evt) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   };
-  fetch(`/connectfour/api/v2/gids?color=${color}`, options)
+  fetch(`/connectfour/api/v2?color=${color}`, options)
     .then((response) => response.json())
     .then((resObj) => {
       if (!resObj.msg) {
