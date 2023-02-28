@@ -15,6 +15,7 @@ function loginView() {
   $("#game-list-view").hide();
   $("#game-view").hide();
   $("#profile").hide();
+  $("#profile-dropdown").hide();
 }
 
 function login() {
@@ -59,6 +60,7 @@ function listView() {
   $("#validation-container").empty();
   $("#game-list-view").show();
   $("#profile").show();
+  $("#profile-dropdown").show();
 
   fetch(`/connectfour/api/v1/users/${authenticatedUser.id}/gids`)
     .then((res) => res.json())
