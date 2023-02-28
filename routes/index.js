@@ -3,12 +3,12 @@ var router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
 // Fake Database
+let UserDb = require("../models/Users.js");
 let GameDB = require("../models/Game.js");
 let TokenDB = require("../models/Token.js");
 let Theme = require("../models/Theme.js");
 let Metadata = require("../models/Metadata.js");
 let ErrorReport = require("../models/Error.js");
-let SessionDB = require("../models/Session.js");
 
 new TokenDB.Token("Sailor Boy", "./assets/sailorboy.gif");
 new TokenDB.Token("Popcorn", "./assets/popcorn.gif");
@@ -16,6 +16,9 @@ new TokenDB.Token("T-Rex", "./assets/trex.gif");
 new TokenDB.Token("Carl", "./assets/carl.gif");
 new TokenDB.Token("Motorcycle", "./assets/motorcycle.gif");
 new TokenDB.Token("Nuclear", "./assets/nuclear.gif");
+
+new UserDb.User("Dakota", "Kallas", "dakota@test.com", "123");
+new UserDb.User("Other", "User", "other@test.com", "123");
 
 let defaultTheme = new Theme(
   "#FF0000",
@@ -27,6 +30,66 @@ let meta = new Metadata(defaultTheme, TokenDB.getTokens());
 
 // Routes
 
+router.all("*", (req, res, next) => {
+  if (req.session && req.session.user) {
+    next();
+  } else if (req.session) {
+    req.session.regenerate((err) => {
+      res.redirect("/");
+    });
+  } else {
+    res.redirect("/");
+  }
+});
+
+/**
+ * GET A LIST OF ALL USERS
+ */
+router.get("/users/", function (req, res, next) {
+  res.status(200).json(UserDb.getUsers());
+});
+
+/**
+ * CREATE NEW USER
+ *
+ * TODO: FINISH ENDPOINT
+ */
+router.post("/users/", function (req, res, next) {
+  res.status(200).send();
+});
+
+/**
+ * GET A SINGLE USER
+ */
+router.get("/users/:uid", function (req, res, next) {
+  res.json(UserDb.getUserById(req.params.uid));
+});
+
+/**
+ * CREATE NEW USER
+ *
+ * TODO: NOT TESTED OR DEBUGGED
+ */
+router.post("/users/:uid", function (req, res, next) {
+  try {
+    res
+      .status(200)
+      .send(
+        new UserDb.User(
+          req.query.first,
+          req.query.last,
+          req.query.email,
+          req.query.password
+        )
+      );
+  } catch (err) {
+    res.status(200).send(new ErrorReport.Error(err.message));
+  }
+});
+
+/**
+ * GET DEFAULT THEME
+ */
 router.get("/meta/", function (req, res, next) {
   try {
     res.status(200).send(meta);
@@ -35,30 +98,25 @@ router.get("/meta/", function (req, res, next) {
   }
 });
 
-// CREATE NEW SESSION
-router.post("/sids/", function (req, res, next) {
-  const session = new SessionDB.Session();
-  res.setHeader("X-sid", session.id);
-  res.status(200).send();
-});
-
-// GET GAMES FOR SESSION
-router.get("/sids/:sid", function (req, res, next) {
+/**
+ * GET GAMES FOR USER
+ */
+router.get("/users/:uid/gids", function (req, res, next) {
   try {
-    let sessionGIDs = SessionDB.getGamesBySID(req.params.sid);
-    let games = GameDB.getGamesFromList(sessionGIDs);
+    let games = GameDB.getGamesByOwner(req.params.uid);
     res.status(200).send(games);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 
-// CREATE NEW GAME
-router.post("/sids/:sid", function (req, res, next) {
+/**
+ * CREATE NEW GAME
+ *
+ * TODO: VALIDATE USER
+ */
+router.post("/users/:uid/gids", function (req, res, next) {
   try {
-    if (!SessionDB.isAuthenticatedSession(req.params.sid)) {
-      throw new Error("Unable to create game, try again later.");
-    }
     let color = req.query.color ? `#${req.query.color}` : "#FF0000";
     let playerToken = TokenDB.getTokenByName(req.body.playerToken);
     let computerToken = TokenDB.getTokenByName(req.body.computerToken);
@@ -66,32 +124,33 @@ router.post("/sids/:sid", function (req, res, next) {
       throw new Error("Invalid input(s) provided. Please try again.");
     }
     let theme = new Theme(color, playerToken, computerToken);
-    let game = new GameDB.Game(theme);
-    SessionDB.addGame(req.params.sid, game.id);
+    let game = new GameDB.Game(theme, req.params.uid);
     res.json(game);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 
-// GET GAME FROM ID
-router.get("/sids/:sid/gids/:gid", function (req, res, next) {
+/**
+ * GET GAME FROM ID
+ *
+ * TODO: ADD VALIDATION TO CHECK USER IS OWNER
+ */
+router.get("/users/:uid/gids/:gid", function (req, res, next) {
   try {
-    if (
-      SessionDB.isAuthenticatedSession(req.params.sid) &&
-      SessionDB.isAuthenticatedGame(req.params.sid, req.params.gid)
-    ) {
-      res.status(200).send(GameDB.getGameById(req.params.gid));
-    } else {
-      throw new Error("Unable to load game, try again later.");
-    }
+    let game = GameDB.getGameById(req.params.gid);
+    res.status(200).send(game);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
 });
 
-// MAKE A MOVE
-router.post("/sids/:sid/gids/:gid", function (req, res, next) {
+/**
+ * MAKE A MOVE
+ *
+ * TODO: VALIDATE USER
+ */
+router.post("/users/:uid/gids/:gid", function (req, res, next) {
   try {
     let nextRow = GameDB.getNextAvailableSlot(req.params.gid, req.query.move);
     if (nextRow < 0 || nextRow > 4) {

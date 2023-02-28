@@ -1,34 +1,66 @@
+let authenticatedUser = null;
+
 window.addEventListener("DOMContentLoaded", () => {
   $("#create-game-btn").click(createGame);
-  setupSession();
+  $("#login-button").click(login);
+  $("#logout-button").click(logout);
+  loginView();
 });
 
-var SID = "empty";
-
 /**
- * Create and setup a new session
+ * Setup the login view
  */
-function setupSession() {
-  let options = {
-    method: "POST",
-  };
+function loginView() {
+  $("#login-view").show();
+  $("#game-list-view").hide();
+  $("#game-view").hide();
+  $("#profile").hide();
+}
 
-  fetch(`/connectfour/api/v1/sids`, options)
-    .then((res) => {
-      SID = res.headers.get("X-sid");
+function login() {
+  let password = $("#password-input").val();
+  let email = $("#email-input").val();
+
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("password", password);
+
+  fetch("/connectfour/api/v1/login", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((user) => {
+      authenticatedUser = user;
+      updateUserProfile(user);
+      updateTokens();
+      listView();
     })
-    .then(updateTokens)
-    .then(listView);
+    .finally(() => {
+      $("#password-input").val("");
+      $("#email-input").val("");
+    });
+}
+
+function updateUserProfile(user) {
+  $("#user-full-name").text(user.first + " " + user.last);
+}
+
+function logout() {
+  fetch("/logout", { method: "POST " }).then(loginView);
 }
 
 /**
  * Setup the List view of the current sessions games
  */
 function listView() {
+  $("#login-view").hide();
   $("#game-view").hide();
   $("#validation-container").empty();
   $("#game-list-view").show();
-  fetch(`/connectfour/api/v1/sids/${SID}`)
+  $("#profile").show();
+
+  fetch(`/connectfour/api/v1/users/${authenticatedUser.id}/gids`)
     .then((res) => res.json())
     .then((resObj) => {
       if (!resObj.msg) {
@@ -90,7 +122,7 @@ function addGames(games) {
     viewBtn.css("background-color", game.theme.color);
     viewBtn.text("view");
     viewBtn.click(function () {
-      fetch(`/connectfour/api/v1/sids/${SID}/gids/${game.id}`)
+      fetch(`/connectfour/api/v1/users/${authenticatedUser.id}/gids/${game.id}`)
         .then((res) => res.json())
         .then((resObj) => {
           if (!resObj.msg) {
@@ -166,7 +198,7 @@ function gameView(game) {
         },
       };
       fetch(
-        `/connectfour/api/v1/sids/${SID}/gids/${game.id}?move=${index}`,
+        `/connectfour/api/v1/users/${authenticatedUser.id}/gids/${game.id}?move=${index}`,
         options
       )
         .then((response) => response.json())
@@ -209,7 +241,7 @@ function addStatusImage(location) {
 function updateTokens() {
   $("#computer-select").empty();
   $("#player-select").empty();
-  fetch(`/connectfour/api/v1/meta`)
+  fetch(`/connectfour/api/v1/meta/`)
     .then((res) => res.json())
     .then((metadata) => setupSelect(metadata.tokens, metadata.default));
 }
@@ -270,7 +302,10 @@ function createGame(evt) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   };
-  fetch(`/connectfour/api/v1/sids/${SID}?color=${color}`, options)
+  fetch(
+    `/connectfour/api/v1/users/${authenticatedUser.id}/gids?color=${color}`,
+    options
+  )
     .then((response) => response.json())
     .then((resObj) => {
       if (!resObj.msg) {

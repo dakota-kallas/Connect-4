@@ -3,11 +3,12 @@ const { v4: uuidv4 } = require("uuid");
 const GAMES = {};
 
 class Game {
-  constructor(theme) {
+  constructor(theme, owner) {
     this.theme = theme;
     this.start = new Date(Date.now());
     this.end = undefined;
     this.status = Statuses.UNFINISHED;
+    this.owner = owner;
     this.id = uuidv4();
     this.grid = [
       [" ", " ", " ", " ", " ", " ", " "],
@@ -28,22 +29,18 @@ const Statuses = {
   TIE: "TIE",
 };
 
+function getGamesByOwner(ownerId) {
+  let games = Object.values(GAMES)
+    .filter((game) => game.owner == ownerId)
+    .map((game) => Object.assign({}, game));
+  return games;
+}
+
 /**
  * @returns All declared GAMES
  */
 function getGames() {
   let result = Object.values(GAMES);
-  return result.map((game) => Object.assign({}, game));
-}
-
-/**
- * PRE: A valid list of GIDs is provided
- * @param {ids[]} games
- * @returns
- */
-function getGamesFromList(gameList) {
-  let gamesArray = Object.values(GAMES);
-  let result = gamesArray.filter((game) => gameList.includes(game.id));
   return result.map((game) => Object.assign({}, game));
 }
 
@@ -227,8 +224,8 @@ module.exports = {
   Game: Game,
   Statuses: Statuses,
   getGames: getGames,
-  getGamesFromList: getGamesFromList,
   getGameById: getGameById,
   getNextAvailableSlot: getNextAvailableSlot,
   addToken: addToken,
+  getGamesByOwner: getGamesByOwner,
 };

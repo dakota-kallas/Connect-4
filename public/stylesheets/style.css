@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -19,6 +18,12 @@ tbody,
 tr,
 td {
   border: none !important;
+}
+
+#game-view,
+#game-list-view,
+#login-view {
+  padding: 50px;
 }
 
 #connect4-board {
