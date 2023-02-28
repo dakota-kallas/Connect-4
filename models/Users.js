@@ -4,11 +4,10 @@ const BY_EMAIL = {};
 const BY_ID = {};
 
 class User {
-  constructor(first, last, email, password) {
-    this.first = first;
-    this.last = last;
+  constructor(email, password, defaults) {
     this.email = email;
     this.password = password;
+    this.defaults = defaults;
     this.id = uuidv4();
 
     BY_ID[this.id] = this;

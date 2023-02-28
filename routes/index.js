@@ -17,16 +17,16 @@ new TokenDB.Token("Carl", "./assets/carl.gif");
 new TokenDB.Token("Motorcycle", "./assets/motorcycle.gif");
 new TokenDB.Token("Nuclear", "./assets/nuclear.gif");
 
-new UserDb.User("Dakota", "Kallas", "dakota@test.com", "123");
-new UserDb.User("Other", "User", "other@test.com", "123");
-
 let defaultTheme = new Theme(
   "#FF0000",
   TokenDB.getTokenByName("Sailor Boy"),
   TokenDB.getTokenByName("Popcorn")
 );
 
-let meta = new Metadata(defaultTheme, TokenDB.getTokens());
+let meta = new Metadata.Metadata(defaultTheme, TokenDB.getTokens());
+
+new UserDb.User("dakota@test.com", "123", meta);
+new UserDb.User("other@test.com", "123", meta);
 
 // Routes
 
@@ -43,45 +43,31 @@ router.all("*", (req, res, next) => {
 });
 
 /**
- * GET A LIST OF ALL USERS
+ * GET GAMES FOR USER
  */
-router.get("/users/", function (req, res, next) {
-  res.status(200).json(UserDb.getUsers());
-});
-
-/**
- * CREATE NEW USER
- *
- * TODO: FINISH ENDPOINT
- */
-router.post("/users/", function (req, res, next) {
-  res.status(200).send();
-});
-
-/**
- * GET A SINGLE USER
- */
-router.get("/users/:uid", function (req, res, next) {
-  res.json(UserDb.getUserById(req.params.uid));
-});
-
-/**
- * CREATE NEW USER
- *
- * TODO: NOT TESTED OR DEBUGGED
- */
-router.post("/users/:uid", function (req, res, next) {
+router.get("/", function (req, res, next) {
   try {
-    res
-      .status(200)
-      .send(
-        new UserDb.User(
-          req.query.first,
-          req.query.last,
-          req.query.email,
-          req.query.password
-        )
-      );
+    let games = GameDB.getGamesByOwner(req.session.user.id);
+    res.status(200).send(games);
+  } catch (err) {
+    res.status(200).send(new ErrorReport.Error(err.message));
+  }
+});
+
+/**
+ * CREATE NEW GAME
+ */
+router.post("/", function (req, res, next) {
+  try {
+    let color = req.query.color ? `#${req.query.color}` : "#FF0000";
+    let playerToken = TokenDB.getTokenByName(req.body.playerToken);
+    let computerToken = TokenDB.getTokenByName(req.body.computerToken);
+    if (!color || !playerToken || !computerToken) {
+      throw new Error("Invalid input(s) provided. Please try again.");
+    }
+    let theme = new Theme(color, playerToken, computerToken);
+    let game = new GameDB.Game(theme, req.session.user.id);
+    res.json(game);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
@@ -99,33 +85,16 @@ router.get("/meta/", function (req, res, next) {
 });
 
 /**
- * GET GAMES FOR USER
+ * UPDATE USER DEFAULTS
  */
-router.get("/users/:uid/gids", function (req, res, next) {
+router.put("/defaults/", function (req, res, next) {
   try {
-    let games = GameDB.getGamesByOwner(req.params.uid);
-    res.status(200).send(games);
-  } catch (err) {
-    res.status(200).send(new ErrorReport.Error(err.message));
-  }
-});
-
-/**
- * CREATE NEW GAME
- *
- * TODO: VALIDATE USER
- */
-router.post("/users/:uid/gids", function (req, res, next) {
-  try {
-    let color = req.query.color ? `#${req.query.color}` : "#FF0000";
-    let playerToken = TokenDB.getTokenByName(req.body.playerToken);
-    let computerToken = TokenDB.getTokenByName(req.body.computerToken);
-    if (!color || !playerToken || !computerToken) {
-      throw new Error("Invalid input(s) provided. Please try again.");
+    if (Metadata.isMetadata(req.body.defaults)) {
+      req.session.user.defaults = req.body.defaults;
+      res.status(200).send(req.session.user.defaults);
+    } else {
+      throw new Error("Could not set user defaults, try again later.");
     }
-    let theme = new Theme(color, playerToken, computerToken);
-    let game = new GameDB.Game(theme, req.params.uid);
-    res.json(game);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
@@ -133,10 +102,8 @@ router.post("/users/:uid/gids", function (req, res, next) {
 
 /**
  * GET GAME FROM ID
- *
- * TODO: ADD VALIDATION TO CHECK USER IS OWNER
  */
-router.get("/users/:uid/gids/:gid", function (req, res, next) {
+router.get("/gids/:gid", function (req, res, next) {
   try {
     let game = GameDB.getGameById(req.params.gid);
     res.status(200).send(game);
@@ -147,10 +114,8 @@ router.get("/users/:uid/gids/:gid", function (req, res, next) {
 
 /**
  * MAKE A MOVE
- *
- * TODO: VALIDATE USER
  */
-router.post("/users/:uid/gids/:gid", function (req, res, next) {
+router.post("/gids/:gid", function (req, res, next) {
   try {
     let nextRow = GameDB.getNextAvailableSlot(req.params.gid, req.query.move);
     if (nextRow < 0 || nextRow > 4) {
