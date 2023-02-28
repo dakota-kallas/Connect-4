@@ -31,8 +31,8 @@ app.get("/", (req, res) => {
   res.redirect("/connectfour");
 });
 
-app.use("/connectfour/api/v1", authRouter);
-app.use("/connectfour/api/v1", indexRouter);
+app.use("/connectfour/api/v2", authRouter);
+app.use("/connectfour/api/v2", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
