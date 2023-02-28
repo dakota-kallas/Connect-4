@@ -47,7 +47,7 @@ function updateUserProfile(user) {
 }
 
 function logout() {
-  fetch("/logout", { method: "POST " }).then(loginView);
+  fetch("/connectfour/api/v1/logout", { method: "POST" }).then(loginView);
 }
 
 /**

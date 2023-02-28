@@ -22,10 +22,9 @@ router.post("/login", upload.none(), (req, res) => {
   }
 });
 
-router.post("/logout", (req, res) => {
+router.post("/logout", upload.none(), (req, res) => {
   req.session.destroy(() => {
     res.redirect("/");
-    res.status(200).send({});
   });
 });
 
