@@ -67,8 +67,6 @@ router.get("/", function (req, res, next) {
 
 /**
  * CREATE NEW GAME
- *
- * TODO: VALIDATE USER
  */
 router.post("/", function (req, res, next) {
   try {
@@ -88,8 +86,6 @@ router.post("/", function (req, res, next) {
 
 /**
  * GET GAME FROM ID
- *
- * TODO: ADD VALIDATION TO CHECK USER IS OWNER
  */
 router.get("/gids/:gid", function (req, res, next) {
   try {
@@ -102,8 +98,6 @@ router.get("/gids/:gid", function (req, res, next) {
 
 /**
  * MAKE A MOVE
- *
- * TODO: VALIDATE USER
  */
 router.post("/gids/:gid", function (req, res, next) {
   try {
