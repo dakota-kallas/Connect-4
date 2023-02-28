@@ -17,9 +17,6 @@ new TokenDB.Token("Carl", "./assets/carl.gif");
 new TokenDB.Token("Motorcycle", "./assets/motorcycle.gif");
 new TokenDB.Token("Nuclear", "./assets/nuclear.gif");
 
-new UserDb.User("Dakota", "Kallas", "dakota@test.com", "123");
-new UserDb.User("Other", "User", "other@test.com", "123");
-
 let defaultTheme = new Theme(
   "#FF0000",
   TokenDB.getTokenByName("Sailor Boy"),
@@ -27,6 +24,9 @@ let defaultTheme = new Theme(
 );
 
 let meta = new Metadata(defaultTheme, TokenDB.getTokens());
+
+new UserDb.User("dakota@test.com", "123", meta);
+new UserDb.User("other@test.com", "123", meta);
 
 // Routes
 

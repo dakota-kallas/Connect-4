@@ -44,7 +44,7 @@ function login() {
 }
 
 function updateUserProfile(user) {
-  $("#user-full-name").text(user.first + " " + user.last);
+  $("#user-full-name").text(user.email);
 }
 
 function logout() {
