@@ -23,7 +23,7 @@ let defaultTheme = new Theme(
   TokenDB.getTokenByName("Popcorn")
 );
 
-let meta = new Metadata(defaultTheme, TokenDB.getTokens());
+let meta = new Metadata.Metadata(defaultTheme, TokenDB.getTokens());
 
 new UserDb.User("dakota@test.com", "123", meta);
 new UserDb.User("other@test.com", "123", meta);

@@ -33,10 +33,12 @@ function login() {
   })
     .then((res) => res.json())
     .then((user) => {
-      authenticatedUser = user;
-      updateUserProfile(user);
-      updateTokens();
-      listView();
+      if (!user.msg) {
+        authenticatedUser = user;
+        updateUserProfile(user);
+        updateTokens();
+        listView();
+      }
     })
     .finally(() => {
       $("#password-input").val("");
