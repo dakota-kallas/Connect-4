@@ -43,17 +43,6 @@ router.all("*", (req, res, next) => {
 });
 
 /**
- * GET DEFAULT THEME
- */
-router.get("/meta/", function (req, res, next) {
-  try {
-    res.status(200).send(meta);
-  } catch (err) {
-    res.status(200).send(new ErrorReport.Error(err.message));
-  }
-});
-
-/**
  * GET GAMES FOR USER
  */
 router.get("/", function (req, res, next) {
@@ -79,6 +68,31 @@ router.post("/", function (req, res, next) {
     let theme = new Theme(color, playerToken, computerToken);
     let game = new GameDB.Game(theme, req.session.user.id);
     res.json(game);
+  } catch (err) {
+    res.status(200).send(new ErrorReport.Error(err.message));
+  }
+});
+
+/**
+ * GET DEFAULT THEME
+ */
+router.get("/meta/", function (req, res, next) {
+  try {
+    res.status(200).send(meta);
+  } catch (err) {
+    res.status(200).send(new ErrorReport.Error(err.message));
+  }
+});
+
+/**
+ * UPDATE USER DEFAULTS
+ *
+ * TODO: VALIDATE DEFAULTS OBJECT IS VALID OBJECT
+ */
+router.put("/defaults/", function (req, res, next) {
+  try {
+    req.session.user.defaults = req.body.defaults;
+    res.status(200).send(req.session.user.defaults);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
