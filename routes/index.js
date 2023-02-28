@@ -86,13 +86,15 @@ router.get("/meta/", function (req, res, next) {
 
 /**
  * UPDATE USER DEFAULTS
- *
- * TODO: VALIDATE DEFAULTS OBJECT IS VALID OBJECT
  */
 router.put("/defaults/", function (req, res, next) {
   try {
-    req.session.user.defaults = req.body.defaults;
-    res.status(200).send(req.session.user.defaults);
+    if (Metadata.isMetadata(req.body.defaults)) {
+      req.session.user.defaults = req.body.defaults;
+      res.status(200).send(req.session.user.defaults);
+    } else {
+      throw new Error("Could not set user defaults, try again later.");
+    }
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
