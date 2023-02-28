@@ -43,51 +43,6 @@ router.all("*", (req, res, next) => {
 });
 
 /**
- * GET A LIST OF ALL USERS
- */
-router.get("/users/", function (req, res, next) {
-  res.status(200).json(UserDb.getUsers());
-});
-
-/**
- * CREATE NEW USER
- *
- * TODO: FINISH ENDPOINT
- */
-router.post("/users/", function (req, res, next) {
-  res.status(200).send();
-});
-
-/**
- * GET A SINGLE USER
- */
-router.get("/users/:uid", function (req, res, next) {
-  res.json(UserDb.getUserById(req.params.uid));
-});
-
-/**
- * CREATE NEW USER
- *
- * TODO: NOT TESTED OR DEBUGGED
- */
-router.post("/users/:uid", function (req, res, next) {
-  try {
-    res
-      .status(200)
-      .send(
-        new UserDb.User(
-          req.query.first,
-          req.query.last,
-          req.query.email,
-          req.query.password
-        )
-      );
-  } catch (err) {
-    res.status(200).send(new ErrorReport.Error(err.message));
-  }
-});
-
-/**
  * GET DEFAULT THEME
  */
 router.get("/meta/", function (req, res, next) {
@@ -101,9 +56,9 @@ router.get("/meta/", function (req, res, next) {
 /**
  * GET GAMES FOR USER
  */
-router.get("/users/:uid/gids", function (req, res, next) {
+router.get("/gids", function (req, res, next) {
   try {
-    let games = GameDB.getGamesByOwner(req.params.uid);
+    let games = GameDB.getGamesByOwner(req.session.user.id);
     res.status(200).send(games);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
@@ -115,7 +70,7 @@ router.get("/users/:uid/gids", function (req, res, next) {
  *
  * TODO: VALIDATE USER
  */
-router.post("/users/:uid/gids", function (req, res, next) {
+router.post("/gids", function (req, res, next) {
   try {
     let color = req.query.color ? `#${req.query.color}` : "#FF0000";
     let playerToken = TokenDB.getTokenByName(req.body.playerToken);
@@ -124,7 +79,7 @@ router.post("/users/:uid/gids", function (req, res, next) {
       throw new Error("Invalid input(s) provided. Please try again.");
     }
     let theme = new Theme(color, playerToken, computerToken);
-    let game = new GameDB.Game(theme, req.params.uid);
+    let game = new GameDB.Game(theme, req.session.user.id);
     res.json(game);
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
@@ -136,7 +91,7 @@ router.post("/users/:uid/gids", function (req, res, next) {
  *
  * TODO: ADD VALIDATION TO CHECK USER IS OWNER
  */
-router.get("/users/:uid/gids/:gid", function (req, res, next) {
+router.get("/gids/:gid", function (req, res, next) {
   try {
     let game = GameDB.getGameById(req.params.gid);
     res.status(200).send(game);
@@ -150,7 +105,7 @@ router.get("/users/:uid/gids/:gid", function (req, res, next) {
  *
  * TODO: VALIDATE USER
  */
-router.post("/users/:uid/gids/:gid", function (req, res, next) {
+router.post("/gids/:gid", function (req, res, next) {
   try {
     let nextRow = GameDB.getNextAvailableSlot(req.params.gid, req.query.move);
     if (nextRow < 0 || nextRow > 4) {

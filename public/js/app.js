@@ -62,7 +62,7 @@ function listView() {
   $("#profile").show();
   $("#profile-dropdown").show();
 
-  fetch(`/connectfour/api/v1/users/${authenticatedUser.id}/gids`)
+  fetch(`/connectfour/api/v1/gids`)
     .then((res) => res.json())
     .then((resObj) => {
       if (!resObj.msg) {
@@ -124,7 +124,7 @@ function addGames(games) {
     viewBtn.css("background-color", game.theme.color);
     viewBtn.text("view");
     viewBtn.click(function () {
-      fetch(`/connectfour/api/v1/users/${authenticatedUser.id}/gids/${game.id}`)
+      fetch(`/connectfour/api/v1/gids/${game.id}`)
         .then((res) => res.json())
         .then((resObj) => {
           if (!resObj.msg) {
@@ -199,10 +199,7 @@ function gameView(game) {
           "Content-Type": "application/json",
         },
       };
-      fetch(
-        `/connectfour/api/v1/users/${authenticatedUser.id}/gids/${game.id}?move=${index}`,
-        options
-      )
+      fetch(`/connectfour/api/v1/gids/${game.id}?move=${index}`, options)
         .then((response) => response.json())
         .then((game) => gameView(game));
     });
@@ -304,10 +301,7 @@ function createGame(evt) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   };
-  fetch(
-    `/connectfour/api/v1/users/${authenticatedUser.id}/gids?color=${color}`,
-    options
-  )
+  fetch(`/connectfour/api/v1/gids?color=${color}`, options)
     .then((response) => response.json())
     .then((resObj) => {
       if (!resObj.msg) {
