@@ -3,6 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, of } from 'rxjs';
 import { Constants } from '../constants/constants';
 import { User } from '../models/user';
+import { Error } from '../models/error';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +56,7 @@ export class AuthService implements OnInit {
     }
   }
 
-  login(username: string, password: string): Observable<User> {
+  login(username: string, password: string): Observable<User | Error> {
     const API = this.URL + '/login';
     const formData = new HttpParams()
       .set('email', username)
@@ -64,8 +65,20 @@ export class AuthService implements OnInit {
       'Content-Type': 'application/x-www-form-urlencoded',
     });
     return this.http
-      .post<User>(API, formData, { headers: headers })
-      .pipe<User>(tap((u) => this.setUser(u)));
+      .post<User | Error>(API, formData, { headers: headers })
+      .pipe<User | Error>(
+        tap((u) => {
+          if (typeof u === 'object' && 'msg' in u) {
+            this.getError(u);
+          } else {
+            this.setUser(u);
+          }
+        })
+      );
+  }
+
+  getError(error: Error): Error {
+    return error;
   }
 
   logout() {

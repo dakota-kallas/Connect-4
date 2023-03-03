@@ -6,6 +6,12 @@
   border-radius: 0.5em;
   margin-top: 1em;
   margin-right: 1em;
+  height: fit-content;
+  width: fit-content;
+}
+
+#connect-4-icon {
+  max-width: 100px;
 }
 
 .things-title {
@@ -26,4 +32,6 @@
   background-color: #464646; /* shown during image load */
   height: 100vh !important;
   width: 100vw !important;
+  display: flex;
+  justify-content: center;
 }

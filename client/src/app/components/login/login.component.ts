@@ -10,6 +10,8 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit {
   @Input() username?: string;
   @Input() password?: string;
+  errorOccured: boolean = false;
+  errorMsg: string = '';
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -19,14 +21,18 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.errorOccured = false;
+
     if (this.username && this.password) {
       this.authService.login(this.username, this.password).subscribe((user) => {
-        if (user.email) {
+        if (typeof user === 'object' && 'email' in user && user.email) {
           this.username = '';
           this.password = '';
           this.router.navigateByUrl('home');
-        } else {
-          console.log(`Invalid user: ${this.username}`);
+        } else if (typeof user === 'object' && 'msg' in user) {
+          this.errorMsg = user.msg;
+          this.errorOccured = true;
+          this.password = '';
         }
       });
     }
