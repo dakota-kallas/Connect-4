@@ -12,6 +12,7 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class GamesComponent {
   games: Game[] = [];
+  meta: Metadata | undefined;
 
   constructor(private gameApi: GameService, private authService: AuthService) {}
 
@@ -45,8 +46,8 @@ export class GamesComponent {
   // }
 
   getMeta() {
-    // this.gameApi.getMeta().subscribe((meta) => {
-    //   this.meta = meta;
-    // });
+    this.gameApi.getMeta().subscribe((meta) => {
+      this.meta = meta;
+    });
   }
 }
