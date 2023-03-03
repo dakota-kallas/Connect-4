@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Game } from 'src/app/models/game';
 import { Metadata } from 'src/app/models/metadata';
 import { User } from 'src/app/models/user';
@@ -10,7 +10,10 @@ import { GameService } from 'src/app/services/game.service';
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.css'],
 })
-export class GamesComponent {
+export class GamesComponent implements OnInit {
+  color: string = '#ff0000';
+  playerToken: string = 'Popcorn';
+  computerToken: string = 'Carl';
   games: Game[] = [];
   meta: Metadata | undefined;
 
@@ -31,19 +34,23 @@ export class GamesComponent {
     });
   }
 
-  // createGame() {
-  //   this.authService.getAuthenticatedUser().subscribe((user) => {
-  //     if (user) {
-  //       this.newItem.owner = user.id;
-  //       this.itemApi.create(this.newItem).subscribe((item) => {
-  //         this.items.push(item);
-  //       });
-
-  //       this.newItem.description = '';
-  //       this.newItem.completed = false;
-  //     }
-  //   });
-  // }
+  // TODO: FINISH THIS METHOD
+  createGame() {
+    this.authService.getAuthenticatedUser().subscribe((user) => {
+      if (user) {
+        console.log(
+          `${this.playerToken} : ${this.computerToken} : ${this.color}`
+        );
+        if (this.playerToken && this.computerToken && this.color) {
+          this.gameApi
+            .create(this.playerToken, this.computerToken, this.color)
+            .subscribe((game) => {
+              this.games.push(game);
+            });
+        }
+      }
+    });
+  }
 
   getMeta() {
     this.gameApi.getMeta().subscribe((meta) => {

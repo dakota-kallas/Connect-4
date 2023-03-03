@@ -3,22 +3,24 @@
     <form id="game-input" class="w-50 float-start d-flex my-3">
         <div class="color-input-group input-group mx-2">
             <label for="color-select" class="input-group-text text-body">Color</label>
-            <input id="color-select" class="form-control text-body h-100" type="color" value="#ff0000" />
+            <input id="color-select" class="form-control text-body h-100" type="color" name="color-select"
+                [value]="color" [(ngModel)]="color" />
         </div>
 
         <div class="input-group mx-2">
             <label for="player-select" class="input-group-text text-body">Player</label>
-            <select id="player-select" class="form-control text-body">
-                <option *ngFor="let token of meta?.tokens" value="token.name">{{token.name}}</option>
+            <select id="player-select" class="form-control text-body" name="player-select" [(ngModel)]="playerToken">
+                <option *ngFor="let token of meta?.tokens" [value]="token.name">{{token.name}}</option>
             </select>
         </div>
         <div class="input-group mx-2">
             <label for="computer-select" class="input-group-text text-body">Computer</label>
-            <select id="computer-select" class="form-control text-body">
-                <option *ngFor="let token of meta?.tokens" value="token.name">{{token.name}}</option>
+            <select id="computer-select" class="form-control text-body" name="computer-select"
+                [(ngModel)]="computerToken">
+                <option *ngFor="let token of meta?.tokens" [value]="token.name">{{token.name}}</option>
             </select>
         </div>
-        <button class="btn btn-primary" id="create-game-btn">CREATE</button>
+        <button class="btn btn-primary" id="create-game-btn" (click)="createGame()">CREATE</button>
     </form>
     <table id="game-list" class="table table-secondary table-striped-custom my-3">
         <thead class="border-1">
@@ -38,7 +40,7 @@
                 <td><img src="{{game.theme.computerToken.url}}" alt="{{game.theme.computerToken.name}}"></td>
                 <td><span>{{game.start}}</span></td>
                 <td><span>{{game.end}}</span></td>
-                <td><button class="btn" [style]="game.theme.color">view</button></td>
+                <td><button class="btn" [ngStyle]="{'background-color': game.theme.color}">view</button></td>
             </tr>
         </tbody>
     </table>

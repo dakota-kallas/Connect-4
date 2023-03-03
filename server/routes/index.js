@@ -32,16 +32,12 @@ new UserDb.User("other@test.com", "123", meta);
 
 router.all("*", (req, res, next) => {
   if (req.session && req.session.user) {
-    console.log("if");
     next();
   } else if (req.session) {
-    console.log("else if");
-    console.log(`${JSON.stringify(req.session)} : ${req.session.user}`);
     req.session.regenerate((err) => {
       res.redirect("/");
     });
   } else {
-    console.log("else");
     res.redirect("/");
   }
 });
