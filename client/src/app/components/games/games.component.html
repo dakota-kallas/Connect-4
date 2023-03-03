@@ -1,1 +1,49 @@
-<p>games works!</p>
+<section id="game-list-view" class="container my-5">
+    <div id="validation-container" class="text-danger"></div>
+    <form id="game-input" class="w-50 float-start d-flex my-3">
+        <div class="color-input-group input-group mx-2">
+            <label for="color-select" class="input-group-text text-body">Color</label>
+            <input id="color-select" class="form-control text-body h-100" type="color" value="#ff0000" />
+        </div>
+
+        <div class="input-group mx-2">
+            <label for="player-select" class="input-group-text text-body">Player</label>
+            <select id="player-select" class="form-control text-body">
+                <option *ngFor="let token of meta.tokens" value="token.name">{{token.name}}</option>
+            </select>
+        </div>
+        <div class="input-group mx-2">
+            <label for="computer-select" class="input-group-text text-body">Computer</label>
+            <select id="computer-select" class="form-control text-body">
+                <option *ngFor="let token of meta.tokens" value="token.name">{{token.name}}</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" id="create-game-btn">CREATE</button>
+    </form>
+    <table id="game-list" class="table table-secondary table-striped-custom my-3">
+        <thead class="border-1">
+            <tr>
+                <th>Status</th>
+                <th>Player</th>
+                <th>Computer</th>
+                <th>Time Started</th>
+                <th>Time Finished</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="game-list-body">
+            <tr *ngFor="let game of games">
+                <td><span>{{game.status}}</span></td>
+                <td><img src="{{game.theme.playerToken.url}}" alt="{{game.theme.playerToken.name}}"></td>
+                <td><img src="{{game.theme.computerToken.url}}" alt="{{game.theme.computerToken.name}}"></td>
+                <td><span>{{game.start}}</span></td>
+                <td><span>{{game.end}}</span></td>
+                <td><button class="btn" [style]="game.theme.color">view</button></td>
+
+                <!-- <td><a [routerLink]="['/items', item.id]">{{item.id}}</a></td>
+                <td>{{item.description}}</td>
+                <td><input type="checkbox" disabled [checked]="item.completed"></td> -->
+            </tr>
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,38 @@
+#game-list-view {
+  padding: 50px;
+}
+
+th {
+  border-bottom: 0 !important;
+}
+
+select:hover {
+  cursor: pointer;
+}
+
+tbody,
+tr,
+td {
+  border: none !important;
+}
+
+#color-select {
+  width: 50px;
+  flex: unset;
+}
+
+#game-list img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.color-input-group {
+  width: fit-content !important;
+  flex-wrap: nowrap;
+}
+
+.table-striped-custom > tbody > tr:nth-of-type(even) {
+  --bs-table-accent-bg: white !important;
+}

@@ -9,7 +9,7 @@ import { Metadata } from '../models/metadata';
   providedIn: 'root',
 })
 export class UserService {
-  URL: string = Constants.API_VERSION + '/users';
+  URL: string = Constants.API_VERSION;
 
   constructor(private http: HttpClient) {}
 

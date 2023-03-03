@@ -20,10 +20,14 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.username && this.password) {
-      this.authService.login(this.username, this.password).subscribe(() => {
-        this.username = '';
-        this.password = '';
-        this.router.navigateByUrl('home');
+      this.authService.login(this.username, this.password).subscribe((user) => {
+        if (user.email) {
+          this.username = '';
+          this.password = '';
+          this.router.navigateByUrl('home');
+        } else {
+          console.log(`Invalid user: ${this.username}`);
+        }
       });
     }
   }

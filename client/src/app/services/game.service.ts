@@ -9,7 +9,7 @@ import { Metadata } from '../models/metadata';
   providedIn: 'root',
 })
 export class GameService {
-  private URL: string = Constants.API_VERSION + '/';
+  private URL: string = Constants.API_VERSION;
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Game[]> {

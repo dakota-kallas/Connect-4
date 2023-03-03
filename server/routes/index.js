@@ -129,4 +129,9 @@ router.post("/gids/:gid", function (req, res, next) {
   }
 });
 
+router.get("/who", (req, res, next) => {
+  let result = req.session && req.session.user;
+  res.json(result);
+});
+
 module.exports = router;
