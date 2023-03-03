@@ -3,11 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UserComponent } from './user/user.component';
-import { TokenComponent } from './token/token.component';
-import { GameComponent } from './game/game.component';
-import { ThemeComponent } from './theme/theme.component';
-import { MetadataComponent } from './metadata/metadata.component';
+import { UserComponent } from './components/user/user.component';
+import { TokenComponent } from './components/token/token.component';
+import { GameComponent } from './components/game/game.component';
+import { ThemeComponent } from './components/theme/theme.component';
+import { MetadataComponent } from './components/metadata/metadata.component';
 
 @NgModule({
   declarations: [
@@ -16,13 +16,10 @@ import { MetadataComponent } from './metadata/metadata.component';
     TokenComponent,
     GameComponent,
     ThemeComponent,
-    MetadataComponent
+    MetadataComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
