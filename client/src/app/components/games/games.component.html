@@ -40,7 +40,9 @@
                 <td><img src="{{game.theme.computerToken.url}}" alt="{{game.theme.computerToken.name}}"></td>
                 <td><span>{{game.start}}</span></td>
                 <td><span>{{game.end}}</span></td>
-                <td><button class="btn" [ngStyle]="{'background-color': game.theme.color}">view</button></td>
+                <td><button class="btn" [ngStyle]="{'background-color': game.theme.color}"
+                        [routerLink]="['/games', game.id]">view</button>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -34,9 +34,9 @@ export class GameService {
     playerToken: string,
     computerToken: string,
     color: string
-  ): Observable<Game> {
+  ): Observable<Game | Error> {
     const body = { playerToken, computerToken };
-    return this.http.post<Game>(
+    return this.http.post<Game | Error>(
       `${this.URL}/?color=${color.replace('#', '')}`,
       body
     );
