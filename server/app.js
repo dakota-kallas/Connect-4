@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var session = require("express-session");
+var cors = require("cors");
 
 var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
@@ -16,6 +17,12 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
+  })
+);
+
+app.use(
+  cors({
+    origin: "http://localhost:4200",
   })
 );
 
