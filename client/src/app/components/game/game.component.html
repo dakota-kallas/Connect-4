@@ -16,52 +16,14 @@
             </div>
         </div>
         <div id="connect4-board" [ngStyle]="{'background-color': game?.theme?.color}">
-            <div class="row">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
+            <div class="row" *ngFor="let row of game?.grid">
+                <div class="cell" *ngFor="let cell of row">
+                    <img [hidden]="cell != ''"
+                        src="{{cell == 'X' ? game?.theme?.playerToken?.url : game?.theme?.computerToken?.url}}"
+                        alt="Token">
+                </div>
             </div>
         </div>
     </div>
-    <div id="game-status" class="container text-center fw-bold fs-3"></div>
+    <div id="game-status" class="container text-center fw-bold fs-3">{{game?.status}}</div>
 </section>

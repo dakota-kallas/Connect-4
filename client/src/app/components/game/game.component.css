@@ -59,6 +59,13 @@
   padding: 0;
 }
 
+.drop-cell:hover {
+  background-image: url("{{game?.theme?.playerToken?.url}}");
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+}
+
 .cell {
   width: 110px;
   height: 110px;
