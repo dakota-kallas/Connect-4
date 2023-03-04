@@ -1,1 +1,67 @@
-<p>game works!</p>
+<section id="game-view">
+    <div class="container d-flex flex-row justify-content-center">
+        <button id="game-return-btn" class="btn btn-primary w-75" [routerLink]="['/home']">Return</button>
+    </div>
+    <div id="game-board" class="container my-5">
+        <div id="token-drop">
+            <div id="status-gif-container"></div>
+            <div id="drop-row">
+                <div class="drop-cell"></div>
+                <div class="drop-cell"></div>
+                <div class="drop-cell"></div>
+                <div class="drop-cell"></div>
+                <div class="drop-cell"></div>
+                <div class="drop-cell"></div>
+                <div class="drop-cell"></div>
+            </div>
+        </div>
+        <div id="connect4-board" [ngStyle]="{'background-color': game?.theme?.color}">
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+        </div>
+    </div>
+    <div id="game-status" class="container text-center fw-bold fs-3"></div>
+</section>
