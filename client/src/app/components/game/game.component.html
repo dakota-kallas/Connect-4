@@ -6,19 +6,33 @@
         <div id="token-drop">
             <div id="status-gif-container"></div>
             <div id="drop-row">
-                <div class="drop-cell"></div>
-                <div class="drop-cell"></div>
-                <div class="drop-cell"></div>
-                <div class="drop-cell"></div>
-                <div class="drop-cell"></div>
-                <div class="drop-cell"></div>
-                <div class="drop-cell"></div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(0)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(1)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(2)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(3)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(4)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(5)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(6)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
             </div>
         </div>
         <div id="connect4-board" [ngStyle]="{'background-color': game?.theme?.color}">
             <div class="row" *ngFor="let row of game?.grid">
                 <div class="cell" *ngFor="let cell of row">
-                    <img [hidden]="cell != ''"
+                    <img [hidden]="cell != 'X' && cell != 'O'"
                         src="{{cell == 'X' ? game?.theme?.playerToken?.url : game?.theme?.computerToken?.url}}"
                         alt="Token">
                 </div>

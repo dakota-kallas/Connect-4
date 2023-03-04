@@ -3,8 +3,8 @@ import { Theme } from './theme';
 export interface Game {
   id: string;
   owner: string;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   theme: Theme;
   status: string;
   grid: String[][];

@@ -43,7 +43,6 @@ export class GamesComponent implements OnInit {
     });
   }
 
-  // TODO: FINISH THIS METHOD
   createGame() {
     this.errorOccured = false;
     this.authService.getAuthenticatedUser().subscribe((user) => {
@@ -57,11 +56,21 @@ export class GamesComponent implements OnInit {
             .subscribe((result) => {
               // is<Game>(result)
               if (typeof result === 'object' && 'id' in result) {
+                // const timeFormat: Intl.DateTimeFormatOptions = {
+                //   weekday: 'short',
+                //   year: 'numeric',
+                //   month: 'short',
+                //   day: 'numeric',
+                // };
+                // result.start = new Date(result.start)
+                //   .toLocaleString('en-US', timeFormat)
+                //   .replace(/,/g, '');
+                // console.log(result.start);
                 this.games.push(result);
                 this.router.navigateByUrl(`games/${result.id}`);
               } else {
                 this.errorOccured = true;
-                this.errorMsg = result.message;
+                this.errorMsg = result.msg;
               }
             });
         }

@@ -11,6 +11,9 @@ import { Game } from '../../models/game';
 export class GameComponent implements OnInit {
   game: Game | undefined;
   private gameId: string = '';
+  errorOccured: boolean = false;
+  errorMsg: string = '';
+  isClickable: boolean = true;
 
   constructor(
     private router: Router,
@@ -25,5 +28,21 @@ export class GameComponent implements OnInit {
         this.game = game;
       });
     });
+  }
+
+  dropToken(column: number) {
+    if (this.game) {
+      this.gameApi.makeMove(this.game, column).subscribe((result) => {
+        if (typeof result === 'object' && 'id' in result) {
+          this.game = result;
+          if (this.game.status != 'UNFINISHED') {
+            this.isClickable = false;
+          }
+        } else {
+          this.errorOccured = true;
+          this.errorMsg = result.msg;
+        }
+      });
+    }
   }
 }

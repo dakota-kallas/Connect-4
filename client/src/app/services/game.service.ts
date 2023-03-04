@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { Game } from '../models/game';
 import { Constants } from '../constants/constants';
 import { Metadata } from '../models/metadata';
 import { Token } from '../models/token';
+import { Error } from '../models/error';
+import { is } from 'typescript-is';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +27,11 @@ export class GameService {
     return this.http.get<Metadata>(this.URL + '/meta/');
   }
 
-  makeMove(game: Game, move: number): Observable<Game> {
-    return this.http.post<Game>(`${this.URL}/${game.id}?move=${move}`, game);
+  makeMove(game: Game, move: number): Observable<Game | Error> {
+    return this.http.post<Game>(
+      `${this.URL}/gids/${game.id}?move=${move}`,
+      game
+    );
   }
 
   // TODO: FIX THIS ENDPOINT CALL
