@@ -31,6 +31,8 @@
   background-size: cover; /* rescales the image to cover the window */
   background-color: #464646; /* shown during image load */
   height: 100vh !important;
+  width: 100vw !important;
+  position: fixed;
   display: flex;
   justify-content: center;
 }
