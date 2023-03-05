@@ -4,8 +4,12 @@
     </div>
     <div id="game-board" class="container my-5">
         <div id="token-drop">
-            <div id="status-gif-container"></div>
-            <div id="drop-row">
+            <div id="status-gif-container">
+                <img [hidden]="game?.status =='UNFINISHED'" class="h-100 w-100"
+                    src="{{game?.status == 'VICTORY' ? '../../../assets/winner.gif' : '../../../assets/cry.gif'}}"
+                    alt="Game Status">
+            </div>
+            <div id="drop-row" [hidden]="game?.status !='UNFINISHED'">
                 <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(0)">
                     <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
                 </div>

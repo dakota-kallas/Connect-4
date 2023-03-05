@@ -4,10 +4,10 @@
 
         <div class="collapse navbar-collapse" id="profile">
             <ul class="navbar-nav" style="position:absolute;right:0;margin-right:3em;">
-                <li id="profile-dropdown" class="nav-item dropdown">
+                <li id="profile-dropdown" class="nav-item dropdown" [hidden]="user == undefined">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <span id="user-full-name"></span>
+                        <span id="user-full-name">{{user?.email}}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                         <li><button class="dropdown-item" id="logout-button" (click)="logout()">Logout</button></li>
