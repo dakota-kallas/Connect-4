@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Game } from '../models/game';
 import { Constants } from '../constants/constants';
 import { Metadata } from '../models/metadata';
-import { Token } from '../models/token';
 import { Error } from '../models/error';
-import { is } from 'typescript-is';
 
 @Injectable({
   providedIn: 'root',
@@ -16,19 +14,15 @@ export class GameService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Game[]> {
-    return this.http.get<Game[]>(this.URL + '/', { responseType: 'json' });
+    return this.http.get<Game[]>(this.URL + '/');
   }
 
   getOne(gameId: string): Observable<Game> {
-    return this.http.get<Game>(this.URL + '/gids/' + gameId, {
-      responseType: 'json',
-    });
+    return this.http.get<Game>(this.URL + '/gids/' + gameId);
   }
 
   getMeta(): Observable<Metadata> {
-    return this.http.get<Metadata>(this.URL + '/meta/', {
-      responseType: 'json',
-    });
+    return this.http.get<Metadata>(this.URL + '/meta/');
   }
 
   makeMove(game: Game, move: number): Observable<Game | Error> {
@@ -38,7 +32,6 @@ export class GameService {
     );
   }
 
-  // TODO: FIX THIS ENDPOINT CALL
   create(
     playerToken: string,
     computerToken: string,

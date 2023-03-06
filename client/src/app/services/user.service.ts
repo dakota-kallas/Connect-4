@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Constants } from '../constants/constants';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { Metadata } from '../models/metadata';
 
