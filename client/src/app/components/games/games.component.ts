@@ -69,14 +69,6 @@ export class GamesComponent implements OnInit {
         }
       }
     });
-    if (this.meta) {
-      console.log(`TESTING !!!`);
-      let test: Theme = this.meta.default;
-      test.color = '#ffffff';
-      test.playerToken = this.meta.tokens[this.meta.tokens.length - 1];
-      test.computerToken = this.meta.tokens[this.meta.tokens.length - 1];
-      this.userApi.update(test);
-    }
   }
 
   getDefaults() {
