@@ -48,25 +48,12 @@ export class GamesComponent implements OnInit {
     this.errorOccured = false;
     this.authService.getAuthenticatedUser().subscribe((user) => {
       if (user) {
-        console.log(
-          `${this.playerToken} : ${this.computerToken} : ${this.color}`
-        );
         if (this.playerToken && this.computerToken && this.color) {
           this.gameApi
             .create(this.playerToken, this.computerToken, this.color)
             .subscribe((result) => {
               // is<Game>(result)
               if (typeof result === 'object' && 'id' in result) {
-                // const timeFormat: Intl.DateTimeFormatOptions = {
-                //   weekday: 'short',
-                //   year: 'numeric',
-                //   month: 'short',
-                //   day: 'numeric',
-                // };
-                // result.start = new Date(result.start)
-                //   .toLocaleString('en-US', timeFormat)
-                //   .replace(/,/g, '');
-                // console.log(result.start);
                 this.games.push(result);
                 this.router.navigateByUrl(`games/${result.id}`);
               } else {
