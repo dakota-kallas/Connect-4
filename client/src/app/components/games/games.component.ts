@@ -74,7 +74,8 @@ export class GamesComponent implements OnInit {
       test.color = '#ffffff';
       test.playerToken = this.meta.tokens[this.meta.tokens.length - 1];
       test.computerToken = this.meta.tokens[this.meta.tokens.length - 1];
-      this.userApi.update(test);
+      console.log(`Theme: ${test}`);
+      this.userApi.update(test).subscribe();
     }
   }
 
