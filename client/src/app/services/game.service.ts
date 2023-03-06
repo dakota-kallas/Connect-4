@@ -16,15 +16,19 @@ export class GameService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Game[]> {
-    return this.http.get<Game[]>(this.URL + '/');
+    return this.http.get<Game[]>(this.URL + '/', { responseType: 'json' });
   }
 
   getOne(gameId: string): Observable<Game> {
-    return this.http.get<Game>(this.URL + '/gids/' + gameId);
+    return this.http.get<Game>(this.URL + '/gids/' + gameId, {
+      responseType: 'json',
+    });
   }
 
   getMeta(): Observable<Metadata> {
-    return this.http.get<Metadata>(this.URL + '/meta/');
+    return this.http.get<Metadata>(this.URL + '/meta/', {
+      responseType: 'json',
+    });
   }
 
   makeMove(game: Game, move: number): Observable<Game | Error> {

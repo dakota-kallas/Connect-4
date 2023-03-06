@@ -1,7 +1,7 @@
-import { Metadata } from './metadata';
+import { Theme } from './theme';
 
 export interface User {
   id: string;
   email: string;
-  defaults: Metadata;
+  defaults: Theme;
 }

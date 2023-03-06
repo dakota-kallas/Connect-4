@@ -25,8 +25,8 @@ let defaultTheme = new Theme(
 
 let meta = new Metadata.Metadata(defaultTheme, TokenDB.getTokens());
 
-new UserDb.User("dakota@test.com", "123", meta);
-new UserDb.User("other@test.com", "123", meta);
+new UserDb.User("dakota@test.com", "123", defaultTheme);
+new UserDb.User("other@test.com", "123", defaultTheme);
 
 // Routes
 
