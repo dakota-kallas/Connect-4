@@ -38,8 +38,8 @@
                 <td><span>{{game.status}}</span></td>
                 <td><img src="{{game.theme.playerToken.url}}" alt="{{game.theme.playerToken.name}}"></td>
                 <td><img src="{{game.theme.computerToken.url}}" alt="{{game.theme.computerToken.name}}"></td>
-                <td><span>{{game.start}}</span></td>
-                <td><span>{{game.end}}</span></td>
+                <td><span>{{game.start | date: 'EEE MMM d y'}}</span></td>
+                <td><span>{{game.end | date: 'EEE MMM d y'}}</span></td>
                 <td><button class="btn" [ngStyle]="{'background-color': game.theme.color}"
                         [routerLink]="['/games', game.id]">view</button>
                 </td>

@@ -6,8 +6,8 @@
         <div id="token-drop">
             <div id="status-gif-container">
                 <img [hidden]="game?.status =='UNFINISHED'" class="h-100 w-100"
-                    src="{{game?.status == 'VICTORY' ? '../../../assets/winner.gif' : '../../../assets/cry.gif'}}"
-                    alt="Game Status">
+                    [src]="game?.status == 'VICTORY' ? '../../../assets/winner.gif' : game?.status == 'LOSS' ? '../../../assets/cry.gif' : game?.status == 'TIE' ? '../../../assets/cry.gif' : ''"
+                    alt=" Game Status">
             </div>
             <div id="drop-row" [hidden]="game?.status !='UNFINISHED'">
                 <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(0)">

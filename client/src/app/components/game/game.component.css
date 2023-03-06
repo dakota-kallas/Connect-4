@@ -61,6 +61,7 @@
 
 .drop-cell:hover img {
   visibility: visible;
+  cursor: pointer;
 }
 
 .drop-cell img {

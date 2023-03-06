@@ -2,15 +2,16 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Game } from 'src/app/models/game';
 import { Metadata } from 'src/app/models/metadata';
-import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { GameService } from 'src/app/services/game.service';
 import { is } from 'typescript-is';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-games',
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.css'],
+  providers: [DatePipe],
 })
 export class GamesComponent implements OnInit {
   color: string = '#ff0000';
