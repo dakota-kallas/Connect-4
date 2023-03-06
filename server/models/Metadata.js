@@ -5,14 +5,6 @@ class Metadata {
   }
 }
 
-function isMetadata(obj) {
-  return ["tokens", "default"].reduce(
-    (acc, val) => obj.hasOwnProperty(val) && acc,
-    true
-  );
-}
-
 module.exports = {
   Metadata: Metadata,
-  isMetadata: isMetadata,
 };

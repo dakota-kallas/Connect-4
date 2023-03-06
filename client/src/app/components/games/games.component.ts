@@ -6,6 +6,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { GameService } from 'src/app/services/game.service';
 import { is } from 'typescript-is';
 import { DatePipe } from '@angular/common';
+import { UserService } from 'src/app/services/user.service';
+import { Theme } from 'src/app/models/theme';
 
 @Component({
   selector: 'app-games',
@@ -25,21 +27,24 @@ export class GamesComponent implements OnInit {
   constructor(
     private router: Router,
     private gameApi: GameService,
+    private userApi: UserService,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.errorOccured = false;
-    this.getMeta();
+    this.getDefaults();
     this.getGames();
   }
 
   getGames() {
     this.authService.getAuthenticatedUser().subscribe((user) => {
-      if (user) {
+      if (user && typeof user === 'object' && 'id' in user) {
         this.gameApi.getAll().subscribe((games) => {
           this.games = games;
         });
+      } else {
+        this.authService.logout();
       }
     });
   }
@@ -64,11 +69,30 @@ export class GamesComponent implements OnInit {
         }
       }
     });
+    if (this.meta) {
+      console.log(`TESTING !!!`);
+      let test: Theme = this.meta.default;
+      test.color = '#ffffff';
+      test.playerToken = this.meta.tokens[this.meta.tokens.length - 1];
+      test.computerToken = this.meta.tokens[this.meta.tokens.length - 1];
+      this.userApi.update(test);
+    }
   }
 
-  getMeta() {
+  getDefaults() {
     this.gameApi.getMeta().subscribe((meta) => {
       this.meta = meta;
+      this.playerToken = meta.default.playerToken.name;
+      this.computerToken = meta.default.computerToken.name;
+      this.authService.getAuthenticatedUser().subscribe((user) => {
+        if (user && typeof user === 'object' && 'id' in user) {
+          this.color = user.defaults.color;
+          this.playerToken = user.defaults.playerToken.name;
+          this.computerToken = user.defaults.computerToken.name;
+        } else {
+          this.authService.logout();
+        }
+      });
     });
   }
 }

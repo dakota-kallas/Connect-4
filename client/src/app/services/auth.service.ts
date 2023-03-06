@@ -37,15 +37,23 @@ export class AuthService implements OnInit {
     this.userSubject.next(user);
   }
 
-  fetchUser(): Observable<User> {
-    return this.http.get<User>(this.URL + '/who').pipe(
+  fetchUser(): Observable<User | Error> {
+    return this.http.get<User>(this.URL + '/who/').pipe(
       tap((user) => {
-        this.setUser(user);
+        if (typeof user === 'object' && 'id' in user) {
+          this.setUser(user);
+        } else {
+          this.returnError(user);
+        }
       })
     );
   }
 
-  getAuthenticatedUser(): Observable<User> {
+  returnError(error: Error): Observable<Error> {
+    return of(error);
+  }
+
+  getAuthenticatedUser(): Observable<User | Error> {
     let txt = window.localStorage.getItem('user');
     if (txt) {
       let user: User = JSON.parse(txt as string) as User;

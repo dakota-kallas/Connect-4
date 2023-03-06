@@ -17,15 +17,21 @@ new TokenDB.Token("Carl", "./assets/carl.gif");
 new TokenDB.Token("Motorcycle", "./assets/motorcycle.gif");
 new TokenDB.Token("Nuclear", "./assets/nuclear.gif");
 
-let defaultTheme = new Theme(
+let defaultTheme = new Theme.Theme(
   "#FF0000",
   TokenDB.getTokenByName("Sailor Boy"),
   TokenDB.getTokenByName("Popcorn")
 );
 
+let testTheme = new Theme.Theme(
+  "#F44DDD",
+  TokenDB.getTokenByName("Motorcycle"),
+  TokenDB.getTokenByName("Popcorn")
+);
+
 let meta = new Metadata.Metadata(defaultTheme, TokenDB.getTokens());
 
-new UserDb.User("dakota@test.com", "123", defaultTheme);
+new UserDb.User("dakota@test.com", "123", testTheme);
 new UserDb.User("other@test.com", "123", defaultTheme);
 
 // Routes
@@ -65,9 +71,24 @@ router.post("/", function (req, res, next) {
     if (!color || !playerToken || !computerToken) {
       throw new Error("Invalid input(s) provided. Please try again.");
     }
-    let theme = new Theme(color, playerToken, computerToken);
+    let theme = new Theme.Theme(color, playerToken, computerToken);
     let game = new GameDB.Game(theme, req.session.user.id);
     res.json(game);
+  } catch (err) {
+    res.status(200).send(new ErrorReport.Error(err.message));
+  }
+});
+
+router.get("/who/", (req, res, next) => {
+  try {
+    let result = req.session && req.session.user ? req.session.user : undefined;
+    if (result) {
+      res.status(200).send(result);
+    } else {
+      res
+        .status(200)
+        .send(new ErrorReport.Error("An error occured, try again later."));
+    }
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
@@ -89,7 +110,7 @@ router.get("/meta/", function (req, res, next) {
  */
 router.put("/defaults/", function (req, res, next) {
   try {
-    if (Metadata.isMetadata(req.body.defaults)) {
+    if (Theme.isTheme(req.body.defaults)) {
       req.session.user.defaults = req.body.defaults;
       res.status(200).send(req.session.user.defaults);
     } else {
@@ -127,11 +148,6 @@ router.post("/gids/:gid", function (req, res, next) {
   } catch (err) {
     res.status(200).send(new ErrorReport.Error(err.message));
   }
-});
-
-router.get("/who", (req, res, next) => {
-  let result = req.session && req.session.user;
-  res.json(result);
 });
 
 module.exports = router;

@@ -6,4 +6,14 @@ class Theme {
   }
 }
 
-module.exports = Theme;
+function isTheme(obj) {
+  return ["color", "playerToken", "computerToken"].reduce(
+    (acc, val) => obj.hasOwnProperty(val) && acc,
+    true
+  );
+}
+
+module.exports = {
+  Theme: Theme,
+  isTheme: isTheme,
+};
