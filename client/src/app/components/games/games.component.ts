@@ -4,10 +4,8 @@ import { Game } from 'src/app/models/game';
 import { Metadata } from 'src/app/models/metadata';
 import { AuthService } from 'src/app/services/auth.service';
 import { GameService } from 'src/app/services/game.service';
-import { is } from 'typescript-is';
 import { DatePipe } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
-import { Theme } from 'src/app/models/theme';
 
 @Component({
   selector: 'app-games',
@@ -73,7 +71,6 @@ export class GamesComponent implements OnInit {
 
   getDefaults() {
     this.gameApi.getMeta().subscribe((meta) => {
-      console.log(`[META]: ${JSON.stringify(meta)}`);
       this.meta = meta;
       this.playerToken = meta.default.playerToken.name;
       this.computerToken = meta.default.computerToken.name;

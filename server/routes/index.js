@@ -118,7 +118,7 @@ router.put("/defaults/", function (req, res, next) {
       );
       req.session.user.defaults = newTheme;
       UserDb.updateUser(req.session.user);
-      UserDb.res.status(200).send(req.session.user.defaults);
+      res.status(200).send(req.session.user.defaults);
     } else {
       throw new Error("Could not set user defaults, try again later.");
     }
