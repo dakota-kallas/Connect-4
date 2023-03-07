@@ -51,7 +51,12 @@ export class GamesComponent implements OnInit {
     this.errorOccured = false;
     this.authService.getAuthenticatedUser().subscribe((user) => {
       if (user) {
-        if (this.playerToken && this.computerToken && this.color) {
+        if (
+          this.playerToken &&
+          this.computerToken &&
+          this.color &&
+          this.computerToken != this.playerToken
+        ) {
           this.gameApi
             .create(this.playerToken, this.computerToken, this.color)
             .subscribe((result) => {
@@ -64,6 +69,9 @@ export class GamesComponent implements OnInit {
                 this.errorMsg = result.msg;
               }
             });
+        } else {
+          this.errorOccured = true;
+          this.errorMsg = 'Invalid input provided.';
         }
       }
     });
