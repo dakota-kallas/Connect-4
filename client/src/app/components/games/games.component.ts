@@ -69,18 +69,11 @@ export class GamesComponent implements OnInit {
         }
       }
     });
-    if (this.meta) {
-      let test: Theme = this.meta.default;
-      test.color = '#ffffff';
-      test.playerToken = this.meta.tokens[this.meta.tokens.length - 1];
-      test.computerToken = this.meta.tokens[this.meta.tokens.length - 1];
-      console.log(`Theme: ${test}`);
-      this.userApi.update(test).subscribe();
-    }
   }
 
   getDefaults() {
     this.gameApi.getMeta().subscribe((meta) => {
+      console.log(`[META]: ${JSON.stringify(meta)}`);
       this.meta = meta;
       this.playerToken = meta.default.playerToken.name;
       this.computerToken = meta.default.computerToken.name;

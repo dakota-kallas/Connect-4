@@ -110,9 +110,15 @@ router.get("/meta/", function (req, res, next) {
  */
 router.put("/defaults/", function (req, res, next) {
   try {
-    if (Theme.isTheme(req.body.defaults)) {
-      req.session.user.defaults = req.body.defaults;
-      res.status(200).send(req.session.user.defaults);
+    if (req.body.color && req.body.playerToken && req.body.computerToken) {
+      let newTheme = new Theme.Theme(
+        req.body.color,
+        req.body.playerToken,
+        req.body.computerToken
+      );
+      req.session.user.defaults = newTheme;
+      UserDb.updateUser(req.session.user);
+      UserDb.res.status(200).send(req.session.user.defaults);
     } else {
       throw new Error("Could not set user defaults, try again later.");
     }

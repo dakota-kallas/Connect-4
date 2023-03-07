@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { Game } from '../../models/game';
+import { Theme } from 'src/app/models/theme';
+import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-game',
@@ -11,17 +14,19 @@ import { Game } from '../../models/game';
 export class GameComponent implements OnInit {
   game: Game | undefined;
   private gameId: string = '';
-  errorOccured: boolean = false;
-  errorMsg: string = '';
+  defaultUpdated: boolean = false;
   isClickable: boolean = true;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private gameApi: GameService
+    private gameApi: GameService,
+    private userApi: UserService,
+    private authApi: AuthService
   ) {}
 
   ngOnInit() {
+    this.defaultUpdated = false;
     this.route.params.subscribe((params) => {
       this.gameId = params['gid'];
       this.gameApi.getOne(this.gameId).subscribe((game) => {
@@ -31,6 +36,7 @@ export class GameComponent implements OnInit {
   }
 
   dropToken(column: number) {
+    this.defaultUpdated = false;
     if (this.game) {
       this.gameApi.makeMove(this.game, column).subscribe((result) => {
         if (typeof result === 'object' && 'id' in result) {
@@ -38,10 +44,22 @@ export class GameComponent implements OnInit {
           if (this.game.status != 'UNFINISHED') {
             this.isClickable = false;
           }
-        } else {
-          this.errorOccured = true;
-          this.errorMsg = result.msg;
         }
+      });
+    }
+  }
+
+  setDefault() {
+    this.defaultUpdated = false;
+    if (this.game) {
+      this.userApi.update(this.game.theme).subscribe((theme) => {
+        this.authApi.getAuthenticatedUser().subscribe((result) => {
+          if (typeof result === 'object' && 'id' in result) {
+            result.defaults = theme;
+            this.authApi.setUser(result);
+            this.defaultUpdated = true;
+          }
+        });
       });
     }
   }

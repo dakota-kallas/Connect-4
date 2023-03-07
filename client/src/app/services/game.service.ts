@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { Game } from '../models/game';
 import { Constants } from '../constants/constants';
 import { Metadata } from '../models/metadata';
@@ -26,10 +26,19 @@ export class GameService {
   }
 
   makeMove(game: Game, move: number): Observable<Game | Error> {
-    return this.http.post<Game>(
-      `${this.URL}/gids/${game.id}?move=${move}`,
-      game
-    );
+    return this.http
+      .post<Game>(`${this.URL}/gids/${game.id}?move=${move}`, game)
+      .pipe(
+        catchError((error) => {
+          if (error.status === 400) {
+            let result: Error = { msg: error.error };
+            return of(result);
+          } else {
+            let result: Error = { msg: 'Something went wrong, try again.' };
+            return of(result);
+          }
+        })
+      );
   }
 
   create(
