@@ -45,9 +45,7 @@ function deleteUser(id) {
 function updateUser(userToUpdate) {
   let user = getUserById(userToUpdate.id);
   if (user) {
-    console.log(`[USER BEFORE]: ${JSON.stringify(BY_ID[user.id])}`);
     BY_ID[user.id].defaults = userToUpdate.defaults;
-    console.log(`[USER AFTER]: ${JSON.stringify(BY_ID[user.id])}`);
   }
 }
 
