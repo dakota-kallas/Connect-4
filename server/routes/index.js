@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const bcrypt = require("bcryptjs");
 router.use(express.urlencoded({ extended: true }));
 
 // Fake Database
@@ -31,8 +32,13 @@ let testTheme = new Theme.Theme(
 
 let meta = new Metadata.Metadata(defaultTheme, TokenDB.getTokens());
 
-new UserDb.User("dakota@test.com", "123", testTheme);
-new UserDb.User("other@test.com", "123", defaultTheme);
+const saltRounds = 10;
+const plainTextPassword = "123";
+
+const hash = bcrypt.hashSync(plainTextPassword, saltRounds);
+
+new UserDb.User("dakota@test.com", hash, testTheme);
+new UserDb.User("other@test.com", hash, defaultTheme);
 
 // Routes
 
