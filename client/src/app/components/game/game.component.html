@@ -1,0 +1,51 @@
+<section id="game-view">
+    <div id="validation-container" class="d-flex justify-content-center mb-1">
+        <span class="text-success" [hidden]="!defaultUpdated">Default theme successfully updated.</span>
+    </div>
+    <div class="container d-flex flex-row justify-content-center gap-2">
+        <button id="game-return-btn" class="btn btn-primary w-50" [routerLink]="['/home']">Return</button>
+        <button class="btn btn-secondary w-50" (click)="setDefault()">Set As Default Theme</button>
+    </div>
+    <div id="game-board" class="container my-5">
+        <div id="token-drop">
+            <div id="status-gif-container">
+                <img [hidden]="game?.status =='UNFINISHED'" class="h-100 w-100"
+                    [src]="game?.status == 'VICTORY' ? '../../../assets/winner.gif' : game?.status == 'LOSS' ? '../../../assets/cry.gif' : game?.status == 'TIE' ? '../../../assets/cry.gif' : ''"
+                    alt=" Game Status">
+            </div>
+            <div id="drop-row" [hidden]="game?.status !='UNFINISHED'">
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(0)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(1)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(2)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(3)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(4)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(5)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+                <div *ngIf="isClickable" class="drop-cell" (click)="dropToken(6)">
+                    <img src="{{game?.theme?.playerToken?.url}}" alt="Token">
+                </div>
+            </div>
+        </div>
+        <div id="connect4-board" [ngStyle]="{'background-color': game?.theme?.color}">
+            <div class="row" *ngFor="let row of game?.grid">
+                <div class="cell" *ngFor="let cell of row">
+                    <img [hidden]="cell != 'X' && cell != 'O'"
+                        src="{{cell == 'X' ? game?.theme?.playerToken?.url : game?.theme?.computerToken?.url}}"
+                        alt="Token">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="game-status" class="container text-center fw-bold fs-3">{{game?.status}}</div>
+</section>
