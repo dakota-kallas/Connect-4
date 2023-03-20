@@ -1,6 +1,6 @@
 # Connect-4
 
-The Connect 4 Express project is an implementation of the classic Connect 4 game as a web application using the Express framework. The goal of this project is to provide a fun, interactive, and user-friendly platform for players to enjoy the game on the web.
+The Connect 4 Express project is an implementation of the classic Connect 4 game as a web application using the Express & Angular framework. The goal of this project is to provide a fun, interactive, and user-friendly platform for players to enjoy the game on the web.
 
 ## Gameplay
 
@@ -13,7 +13,10 @@ This project is designed to be fast, reliable, and engaging. Whether you're a se
 ## Screenshots
 
 ###### Game List
-<img width="1680" alt="Connect 4 Game View" src="https://github.com/dakota-kallas/Connect-4/blob/main/images/Landing.PNG">
+<img width="1280" alt="Connect 4 Game View" src="https://github.com/dakota-kallas/Connect-4/blob/main/images/Landing.PNG">
 
 ###### Game View
-<img width="1680" alt="Connect 4 Game List" src="https://github.com/dakota-kallas/Connect-4/blob/main/images/GameView.PNG">
+<img width="1280" alt="Connect 4 Game List" src="https://github.com/dakota-kallas/Connect-4/blob/main/images/GameView.PNG">
+
+###### Login View
+<img width="380" alt="Connect 4 Login Page" src="https://github.com/dakota-kallas/Connect-4/blob/main/images/Login.PNG">
