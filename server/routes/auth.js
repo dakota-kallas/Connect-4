@@ -17,8 +17,7 @@ router.post("/login", upload.none(), (req, res) => {
   if (user) {
     bcrypt.compare(password, user.password, function (err, result) {
       if (err) {
-        console.error(err);
-        res.status(500).send(new ErrorReport.Error(ERROR));
+        res.status(401).send(new ErrorReport.Error(ERROR));
       } else if (result) {
         req.session.regenerate(() => {
           delete user.password;
@@ -26,11 +25,11 @@ router.post("/login", upload.none(), (req, res) => {
           res.json(user);
         });
       } else {
-        res.status(200).send(new ErrorReport.Error(ERROR));
+        res.status(401).send(new ErrorReport.Error(ERROR));
       }
     });
   } else {
-    res.status(200).send(new ErrorReport.Error(ERROR));
+    res.status(401).send(new ErrorReport.Error(ERROR));
   }
 });
 

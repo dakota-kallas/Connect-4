@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap, of } from 'rxjs';
+import { BehaviorSubject, Observable, tap, of, catchError } from 'rxjs';
 import { Constants } from '../constants/constants';
 import { User } from '../models/user';
 import { Error } from '../models/error';
@@ -74,7 +74,10 @@ export class AuthService implements OnInit {
     });
     return this.http
       .post<User | Error>(API, formData, { headers: headers })
-      .pipe<User | Error>(
+      .pipe(
+        catchError((error) => {
+          return of(error.error);
+        }),
         tap((u) => {
           if (typeof u === 'object' && 'msg' in u) {
             this.getError(u);
