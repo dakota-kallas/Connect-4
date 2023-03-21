@@ -31,27 +31,32 @@ const saltRounds = 10;
 new UserDb.User(
   "dakota@test.com",
   bcrypt.hashSync("123", saltRounds),
-  defaultTheme
+  "Dakota",
+  "Kallas"
 );
 new UserDb.User(
   "other@test.com",
   bcrypt.hashSync("123", saltRounds),
-  defaultTheme
+  "Other",
+  "User"
 );
 new UserDb.User(
   "bilbo@mordor.org",
   bcrypt.hashSync("111111111", saltRounds),
-  defaultTheme
+  "Biblo",
+  "Baggins"
 );
 new UserDb.User(
   "frodo@mordor.org",
   bcrypt.hashSync("222222222", saltRounds),
-  defaultTheme
+  "Frodo",
+  "Baggins"
 );
 new UserDb.User(
   "samwise@mordor.org",
   bcrypt.hashSync("333333333", saltRounds),
-  defaultTheme
+  "Sam",
+  "Wise"
 );
 
 // Routes

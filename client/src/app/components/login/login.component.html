@@ -12,9 +12,9 @@
                     </div>
                     <div>
                         <div class="form-group mb-2">
-                            <label for="lg_username" class="sr-only">Username</label>
-                            <input type="text" class="form-control" name="username" placeholder="username"
-                                [(ngModel)]="username">
+                            <label for="email" class="sr-only">Email</label>
+                            <input type="text" class="form-control" name="email" placeholder="email"
+                                [(ngModel)]="email">
                         </div>
 
                         <div class="form-group mb-2">
@@ -25,6 +25,9 @@
                     </div>
 
                     <button type="submit" (click)="login()" class="btn btn-primary btn-sm">Login
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                    <button (click)="register()" class="btn btn-primary btn-sm ms-2">Register
                         <i class="glyphicon glyphicon-chevron-right"></i>
                     </button>
                 </div>
