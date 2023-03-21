@@ -97,7 +97,9 @@ export class AuthService implements OnInit {
     const API = this.URL + '/register';
     const formData = new HttpParams()
       .set('email', email)
-      .set('password', password);
+      .set('password', password)
+      .set('firstName', firstName)
+      .set('lastName', lastName);
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
     });

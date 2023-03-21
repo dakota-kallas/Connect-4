@@ -6,9 +6,11 @@ const BY_EMAIL = {};
 const BY_ID = {};
 
 class User {
-  constructor(email, password) {
+  constructor(email, password, firstName, lastName) {
     this.email = email;
     this.password = password;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.defaults = new Theme.Theme(
       "#FF0000",
       TokenDB.getTokenByName("Sailor Boy"),

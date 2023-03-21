@@ -42,6 +42,8 @@ router.post("/logout", upload.none(), (req, res) => {
 router.post("/register", upload.none(), (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
   const hashedPassword = bcrypt.hashSync(password, 10);
   let user = users.getUserByEmail(email);
   if (user) {
@@ -49,7 +51,7 @@ router.post("/register", upload.none(), (req, res) => {
       .status(400)
       .send(new ErrorReport.Error("Unable to register, try again later."));
   } else {
-    new users.User(email, hashedPassword);
+    new users.User(email, hashedPassword, firstName, lastName);
     user = users.getUserByEmail(email);
 
     if (user) {
