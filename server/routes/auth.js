@@ -39,4 +39,28 @@ router.post("/logout", upload.none(), (req, res) => {
   });
 });
 
+router.post("/register", upload.none(), (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  let user = users.getUserByEmail(email);
+  if (user) {
+    res
+      .status(400)
+      .send(new ErrorReport.Error("Unable to register, try again later."));
+  } else {
+    new users.User(email, hashedPassword);
+    user = users.getUserByEmail(email);
+
+    if (user) {
+      delete user.password;
+      res.status(200).send(user);
+    } else {
+      res
+        .status(400)
+        .send(new ErrorReport.Error("Unable to register, try again later."));
+    }
+  }
+});
+
 module.exports = router;

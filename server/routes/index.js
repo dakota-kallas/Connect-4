@@ -28,31 +28,11 @@ let meta = new Metadata.Metadata(defaultTheme, TokenDB.getTokens());
 
 const saltRounds = 10;
 
-new UserDb.User(
-  "dakota@test.com",
-  bcrypt.hashSync("123", saltRounds),
-  defaultTheme
-);
-new UserDb.User(
-  "other@test.com",
-  bcrypt.hashSync("123", saltRounds),
-  defaultTheme
-);
-new UserDb.User(
-  "bilbo@mordor.org",
-  bcrypt.hashSync("111111111", saltRounds),
-  defaultTheme
-);
-new UserDb.User(
-  "frodo@mordor.org",
-  bcrypt.hashSync("222222222", saltRounds),
-  defaultTheme
-);
-new UserDb.User(
-  "samwise@mordor.org",
-  bcrypt.hashSync("333333333", saltRounds),
-  defaultTheme
-);
+new UserDb.User("dakota@test.com", bcrypt.hashSync("123", saltRounds));
+new UserDb.User("other@test.com", bcrypt.hashSync("123", saltRounds));
+new UserDb.User("bilbo@mordor.org", bcrypt.hashSync("111111111", saltRounds));
+new UserDb.User("frodo@mordor.org", bcrypt.hashSync("222222222", saltRounds));
+new UserDb.User("samwise@mordor.org", bcrypt.hashSync("333333333", saltRounds));
 
 // Routes
 

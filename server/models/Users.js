@@ -1,13 +1,19 @@
 const { v4: uuidv4 } = require("uuid");
+let TokenDB = require("../models/Token.js");
+let Theme = require("../models/Theme.js");
 
 const BY_EMAIL = {};
 const BY_ID = {};
 
 class User {
-  constructor(email, password, defaults) {
+  constructor(email, password) {
     this.email = email;
     this.password = password;
-    this.defaults = defaults;
+    this.defaults = new Theme.Theme(
+      "#FF0000",
+      TokenDB.getTokenByName("Sailor Boy"),
+      TokenDB.getTokenByName("Popcorn")
+    );
     this.id = uuidv4();
 
     BY_ID[this.id] = this;

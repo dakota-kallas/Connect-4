@@ -48,6 +48,24 @@ export class RegisterComponent implements OnInit {
         this.errorMsg = 'Invalid email address.';
         return;
       }
+
+      this.authService
+        .register(this.email, this.password, this.firstName, this.lastName)
+        .subscribe((user) => {
+          if (typeof user === 'object' && 'email' in user && user.email) {
+            this.email = '';
+            this.password = '';
+            this.passwordConfirm = '';
+            this.firstName = '';
+            this.lastName = '';
+            this.router.navigateByUrl('login');
+          } else if (typeof user === 'object' && 'msg' in user) {
+            this.errorMsg = user.msg;
+            this.errorOccured = true;
+            this.password = '';
+            this.passwordConfirm = '';
+          }
+        });
     }
   }
 

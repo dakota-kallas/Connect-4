@@ -88,6 +88,32 @@ export class AuthService implements OnInit {
       );
   }
 
+  register(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ): Observable<User | Error> {
+    const API = this.URL + '/register';
+    const formData = new HttpParams()
+      .set('email', email)
+      .set('password', password);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+
+    return this.http
+      .post<User | Error>(API, formData, { headers: headers })
+      .pipe(
+        catchError((error) => {
+          return of(error.error);
+        }),
+        tap((u) => {
+          return of(u);
+        })
+      );
+  }
+
   getError(error: Error): Error {
     return error;
   }
