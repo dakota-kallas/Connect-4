@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  @Input() username?: string;
+  @Input() email?: string;
   @Input() password?: string;
   errorOccured: boolean = false;
   errorMsg: string = '';
@@ -16,17 +16,17 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
-    this.username = '';
+    this.email = '';
     this.password = '';
   }
 
   login() {
     this.errorOccured = false;
 
-    if (this.username && this.password) {
-      this.authService.login(this.username, this.password).subscribe((user) => {
+    if (this.email && this.password) {
+      this.authService.login(this.email, this.password).subscribe((user) => {
         if (typeof user === 'object' && 'email' in user && user.email) {
-          this.username = '';
+          this.email = '';
           this.password = '';
           this.router.navigateByUrl('home');
         } else if (typeof user === 'object' && 'msg' in user) {
@@ -36,5 +36,12 @@ export class LoginComponent implements OnInit {
         }
       });
     }
+  }
+
+  register() {
+    this.errorOccured = false;
+    this.email = '';
+    this.password = '';
+    this.router.navigateByUrl('register');
   }
 }

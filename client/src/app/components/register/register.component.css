@@ -1,0 +1,29 @@
+#register-form {
+  max-width: 600px;
+  min-width: 300px;
+  padding: 15px;
+  background-color: #eee;
+  border-radius: 0.5em;
+  margin-top: 1em;
+  margin-right: 1em;
+  height: fit-content;
+  width: fit-content;
+}
+
+#connect-4-icon {
+  max-width: 100px;
+}
+
+.background {
+  background-image: url("../../../assets/background.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover; /* rescales the image to cover the window */
+  background-color: #464646; /* shown during image load */
+  height: 100vh !important;
+  width: 100vw !important;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+}
