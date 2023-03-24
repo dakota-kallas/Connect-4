@@ -47,19 +47,4 @@ export class GameComponent implements OnInit {
       });
     }
   }
-
-  setDefault() {
-    this.defaultUpdated = false;
-    if (this.game) {
-      this.userApi.update(this.game.theme).subscribe((theme) => {
-        this.authApi.getAuthenticatedUser().subscribe((result) => {
-          if (typeof result === 'object' && 'id' in result) {
-            result.defaults = theme;
-            this.authApi.setUser(result);
-            this.defaultUpdated = true;
-          }
-        });
-      });
-    }
-  }
 }

@@ -1,10 +1,6 @@
 <section id="game-view">
-    <div id="validation-container" class="d-flex justify-content-center mb-1">
-        <span class="text-success" [hidden]="!defaultUpdated">Default theme successfully updated.</span>
-    </div>
     <div class="container d-flex flex-row justify-content-center gap-2">
-        <button id="game-return-btn" class="btn btn-primary w-50" [routerLink]="['/home']">Return</button>
-        <button class="btn btn-secondary w-50" (click)="setDefault()">Set As Default Theme</button>
+        <button id="game-return-btn" class="btn btn-primary w-100" [routerLink]="['/home']">Return</button>
     </div>
     <div id="game-board" class="container my-5">
         <div id="token-drop">

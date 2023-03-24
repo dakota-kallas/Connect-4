@@ -1,6 +1,6 @@
 # Connect-4
 
-The Connect 4 Express project is an implementation of the classic Connect 4 game as a web application using the Express & Angular framework. The goal of this project is to provide a fun, interactive, and user-friendly platform for players to enjoy the game on the web.
+The Connect 4 project is an implementation of the classic Connect 4 game as a web application using the Express & Angular framework. The goal of this project is to provide a fun, interactive, and user-friendly platform for players to enjoy the game on the web.
 
 ## Gameplay
 
