@@ -133,8 +133,8 @@ router.put("/defaults/", function (req, res, next) {
     if (req.body.color && req.body.playerToken && req.body.computerToken) {
       let newTheme = new Theme.Theme(
         req.body.color,
-        req.body.playerToken,
-        req.body.computerToken
+        TokenDB.getTokenByName(req.body.playerToken),
+        TokenDB.getTokenByName(req.body.computerToken)
       );
       req.session.user.defaults = newTheme;
       UserDb.updateUser(req.session.user);

@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { GameService } from 'src/app/services/game.service';
 import { DatePipe } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
+import { Theme } from 'src/app/models/theme';
 
 @Component({
   selector: 'app-games',
@@ -21,6 +22,7 @@ export class GamesComponent implements OnInit {
   meta: Metadata | undefined;
   errorOccured: boolean = false;
   errorMsg: string = '';
+  defaultUpdated: boolean = false;
 
   constructor(
     private router: Router,
@@ -31,6 +33,7 @@ export class GamesComponent implements OnInit {
 
   ngOnInit() {
     this.errorOccured = false;
+    this.defaultUpdated = false;
     this.getDefaults();
     this.getGames();
   }
@@ -49,6 +52,7 @@ export class GamesComponent implements OnInit {
 
   createGame() {
     this.errorOccured = false;
+    this.defaultUpdated = false;
     this.authService.getAuthenticatedUser().subscribe((user) => {
       if (user) {
         if (
@@ -91,6 +95,37 @@ export class GamesComponent implements OnInit {
           this.authService.logout();
         }
       });
+    });
+  }
+
+  setDefault() {
+    this.defaultUpdated = false;
+    this.errorOccured = false;
+    this.authService.getAuthenticatedUser().subscribe((result) => {
+      if (typeof result === 'object' && 'id' in result) {
+        if (
+          this.computerToken &&
+          this.playerToken &&
+          this.computerToken &&
+          this.playerToken != this.computerToken
+        ) {
+          this.userApi
+            .update(this.color, this.playerToken, this.computerToken)
+            .subscribe((theme) => {
+              if (typeof theme === 'object' && 'playerToken' in theme) {
+                result.defaults = theme;
+                this.authService.setUser(result);
+                this.defaultUpdated = true;
+              } else {
+                this.errorMsg = theme.msg;
+                this.errorOccured = true;
+              }
+            });
+        } else {
+          this.errorMsg = 'Invalid input provided.';
+          this.errorOccured = true;
+        }
+      }
     });
   }
 }
