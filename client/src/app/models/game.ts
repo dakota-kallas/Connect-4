@@ -2,7 +2,7 @@ import { Theme } from './theme';
 
 export interface Game {
   id: string;
-  owner: Date;
+  owner: string;
   start: Date;
   end: string;
   theme: Theme;
